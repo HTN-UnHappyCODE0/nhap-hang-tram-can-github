@@ -228,13 +228,17 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								),
 							},
 							{
-								title: 'Công ty',
-								render: (data: IPriceTag) => (
-									<Link href={`/nha-cung-cap/${data?.partnerUu?.uuid}`} className={styles.link}>
-										{data?.partnerUu?.name || '---'}
-									</Link>
-								),
+								title: 'Giá tiền (VND)',
+								render: (data: IPriceTag) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
+							// {
+							// 	title: 'Công ty',
+							// 	render: (data: IPriceTag) => (
+							// 		<Link href={`/nha-cung-cap/${data?.partnerUu?.uuid}`} className={styles.link}>
+							// 			{data?.partnerUu?.name || '---'}
+							// 		</Link>
+							// 	),
+							// },
 							{
 								title: 'Loại hàng',
 								render: (data: IPriceTag) => <>{data?.productTypeUu?.name || '---'}</>,
@@ -251,10 +255,6 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 										{data?.transportType == TYPE_TRANSPORT.DUONG_THUY && 'Đường thủy'}
 									</>
 								),
-							},
-							{
-								title: 'Giá tiền (VND)',
-								render: (data: IPriceTag) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
 							{
 								title: 'Cung cấp',
@@ -291,7 +291,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 				<Pagination
 					currentPage={Number(_page) || 1}
 					total={listPriceTag?.data?.pagination?.totalCount}
-					pageSize={Number(_pageSize) || 20}
+					pageSize={Number(_pageSize) || 50}
 					dependencies={[_pageSize, _keyword, _specUuid, _productTypeUuid, _transportType, _status]}
 				/>
 			</div>

@@ -270,12 +270,12 @@ function PageUpdateWorkshop({}: PropsPageUpdateWorkshop) {
 		if (!form.userUuid) {
 			return toastWarn({msg: 'Vui lòng chọn nhân viên quản lý!'});
 		}
-		if (!form.provinceId) {
-			return toastWarn({msg: 'Vui lòng chọn tỉnh/thành phố!'});
-		}
-		if (!form.districtId) {
-			return toastWarn({msg: 'Vui lòng chọn quận/huyện!'});
-		}
+		// if (!form.provinceId) {
+		// 	return toastWarn({msg: 'Vui lòng chọn tỉnh/thành phố!'});
+		// }
+		// if (!form.districtId) {
+		// 	return toastWarn({msg: 'Vui lòng chọn quận/huyện!'});
+		// }
 		if (!form.partnerUuid) {
 			return toastWarn({
 				msg: `Vui lòng nhập tên ${
@@ -289,9 +289,9 @@ function PageUpdateWorkshop({}: PropsPageUpdateWorkshop) {
 				}!`,
 			});
 		}
-		if (!form.townId) {
-			return toastWarn({msg: 'Vui lòng chọn xã/phường!'});
-		}
+		// if (!form.townId) {
+		// 	return toastWarn({msg: 'Vui lòng chọn xã/phường!'});
+		// }
 
 		return funcUpdateCustomer.mutate();
 	};
@@ -578,11 +578,7 @@ function PageUpdateWorkshop({}: PropsPageUpdateWorkshop) {
 							name='provinceId'
 							value={form.provinceId}
 							placeholder='Chọn tỉnh/thành phố'
-							label={
-								<span>
-									Tỉnh/Thành phố <span style={{color: 'red'}}>*</span>
-								</span>
-							}
+							label={<span>Tỉnh/Thành phố</span>}
 						>
 							{listProvince?.data?.map((v: any) => (
 								<Option
@@ -607,11 +603,7 @@ function PageUpdateWorkshop({}: PropsPageUpdateWorkshop) {
 								name='districtId'
 								value={form.districtId}
 								placeholder='Chọn quận/huyện'
-								label={
-									<span>
-										Quận/Huyện <span style={{color: 'red'}}>*</span>
-									</span>
-								}
+								label={<span>Quận/Huyện</span>}
 							>
 								{listDistrict?.data?.map((v: any) => (
 									<Option
@@ -629,17 +621,7 @@ function PageUpdateWorkshop({}: PropsPageUpdateWorkshop) {
 								))}
 							</Select>
 						</div>
-						<Select
-							isSearch
-							name='townId'
-							value={form.townId}
-							placeholder='Chọn xã/phường'
-							label={
-								<span>
-									Xã/phường <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-						>
+						<Select isSearch name='townId' value={form.townId} placeholder='Chọn xã/phường' label={<span>Xã/phường</span>}>
 							{listTown?.data?.map((v: any) => (
 								<Option
 									key={v?.xaid}
