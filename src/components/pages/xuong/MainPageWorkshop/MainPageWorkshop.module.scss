@@ -10,6 +10,7 @@
 	display: flex;
 	align-items: center;
 	gap: 12px;
+	flex-wrap: wrap;
 }
 
 .search {
@@ -83,7 +84,6 @@
 }
 
 .mainOption {
-
 	padding: 8px 12px;
 	border-radius: 8px;
 	background: #fff;

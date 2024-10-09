@@ -13,6 +13,7 @@ import {
 	CONFIG_STATUS,
 	CONFIG_TYPE_FIND,
 	QUERY_KEY,
+	REGENCY_NAME,
 	TYPE_PRODUCT,
 	TYPE_TRANSPORT,
 } from '~/constants/config/enum';
@@ -37,11 +38,14 @@ import FormUpdatePriceTag from '../FormUpdatePriceTag';
 import Link from 'next/link';
 import {FaHistory} from 'react-icons/fa';
 import TagStatusSpecCustomer from './TagStatusSpecCustomer';
+import userServices from '~/services/userServices';
+import regencyServices from '~/services/regencyServices';
 
 function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 	const router = useRouter();
 
-	const {_page, _pageSize, _keyword, _specUuid, _productTypeUuid, _state, _transportType, _status} = router.query;
+	const {_page, _pageSize, _keyword, _specUuid, _productTypeUuid, _state, _parentUserUuid, _userUuid, _transportType, _status} =
+		router.query;
 
 	const [dataUpdate, setDataUpdate] = useState<IPriceTag | null>(null);
 
@@ -72,7 +76,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
 					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
 					status: CONFIG_STATUS.HOAT_DONG,
-					type: [TYPE_PRODUCT.CONG_TY, TYPE_PRODUCT.DUNG_CHUNG],
+					type: [TYPE_PRODUCT.CONG_TY],
 				}),
 			}),
 		select(data) {
@@ -100,8 +104,83 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 		},
 	});
 
+	const listRegency = useQuery([QUERY_KEY.dropdown_chuc_vu], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: regencyServices.listRegency({
+					page: 1,
+					pageSize: 20,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
+	const listUserPurchasing = useQuery([QUERY_KEY.dropdown_quan_ly_nhap_hang], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: userServices.listUser2({
+					page: 1,
+					pageSize: 20,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+					provinceIDOwer: '',
+					regencyUuid: [listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Quản lý nhập hàng'])?.uuid],
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+		enabled: listRegency.isSuccess,
+	});
+	const listUserMarket = useQuery([QUERY_KEY.dropdown_nhan_vien_thi_truong, _parentUserUuid], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: userServices.listUser2({
+					page: 1,
+					pageSize: 20,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+					provinceIDOwer: '',
+					regencyUuid: [listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Nhân viên thị trường'])?.uuid],
+					parentUuid: (_parentUserUuid as string) || '',
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+		enabled: listRegency.isSuccess,
+	});
+
 	const listPriceTag = useQuery(
-		[QUERY_KEY.table_gia_tien_hang, _page, _pageSize, _keyword, _specUuid, _productTypeUuid, _state, _transportType, _status],
+		[
+			QUERY_KEY.table_gia_tien_hang,
+			_page,
+			_pageSize,
+			_keyword,
+			_specUuid,
+			_parentUserUuid,
+			_userUuid,
+			_productTypeUuid,
+			_state,
+			_transportType,
+			_status,
+		],
 		{
 			queryFn: () =>
 				httpRequest({
@@ -120,6 +199,8 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 						priceTagUuid: '',
 						state: !!_state ? Number(_state) : null,
 						transportType: !!_transportType ? Number(_transportType) : null,
+						userUuid: (_userUuid as string) || '',
+						parentUserUuid: (_parentUserUuid as string) || '',
 					}),
 				}),
 			select(data) {
@@ -127,6 +208,22 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 			},
 		}
 	);
+
+	useEffect(() => {
+		if (_parentUserUuid) {
+			router.replace(
+				{
+					pathname: router.pathname,
+					query: {
+						...router.query,
+						_userUuid: null,
+					},
+				},
+				undefined,
+				{shallow: true, scroll: false}
+			);
+		}
+	}, [_parentUserUuid]);
 
 	return (
 		<div className={styles.container}>
@@ -138,9 +235,9 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
-							name='Quy cách'
-							query='_specUuid'
-							listFilter={listSpecifications?.data?.map((v: any) => ({
+							name='Loại hàng'
+							query='_productTypeUuid'
+							listFilter={listProductType?.data?.map((v: any) => ({
 								id: v?.uuid,
 								name: v?.name,
 							}))}
@@ -149,9 +246,31 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
-							name='Loại hàng'
-							query='_productTypeUuid'
-							listFilter={listProductType?.data?.map((v: any) => ({
+							name='Quản lý nhập hàng'
+							query='_parentUserUuid'
+							listFilter={listUserPurchasing?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: v?.fullName,
+							}))}
+						/>
+					</div>
+					<div className={styles.filter}>
+						<FilterCustom
+							isSearch
+							name='Nhân viên thị trường'
+							query='_userUuid'
+							listFilter={listUserMarket?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: v?.fullName,
+							}))}
+						/>
+					</div>
+					<div className={styles.filter}>
+						<FilterCustom
+							isSearch
+							name='Quy cách'
+							query='_specUuid'
+							listFilter={listSpecifications?.data?.map((v: any) => ({
 								id: v?.uuid,
 								name: v?.name,
 							}))}

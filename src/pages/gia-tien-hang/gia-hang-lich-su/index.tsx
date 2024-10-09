@@ -2,7 +2,7 @@ import Head from 'next/head';
 import {Fragment, ReactElement} from 'react';
 import BaseLayout from '~/components/layouts/BaseLayout';
 import LayoutPages from '~/components/layouts/LayoutPages';
-import MainPriceTagUpdate from '~/components/pages/gia-tien-hang/MainPriceTagUpdate';
+import MainHistoryChangePriceTag from '~/components/pages/gia-tien-hang/MainHistoryChangePriceTag';
 import {PATH} from '~/constants/config';
 
 export default function Page() {
@@ -21,12 +21,12 @@ export default function Page() {
 						url: PATH.GiaTienHangHienTai,
 					},
 					{
-						title: 'Giá hàng chỉnh sửa',
-						url: PATH.GiaTienHangQuaKhu,
+						title: 'Lịch sử giá hàng',
+						url: PATH.GiaTienHangLichSu,
 					},
 				]}
 			>
-				<MainPriceTagUpdate />
+				<MainHistoryChangePriceTag />
 			</LayoutPages>
 		</Fragment>
 	);
