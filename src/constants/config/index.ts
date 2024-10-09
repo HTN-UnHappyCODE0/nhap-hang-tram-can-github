@@ -29,10 +29,15 @@ export enum PATH {
 	// Giá tiền hàng
 	GiaTien = '/gia-tien-hang',
 	GiaTienHangHienTai = '/gia-tien-hang/gia-hang-hien-tai',
-	GiaTienHangQuaKhu = '/gia-tien-hang/gia-hang-chinh-sua',
+	// GiaTienHangQuaKhu = '/gia-tien-hang/gia-hang-chinh-sua',
+	GiaTienHangLichSu = '/gia-tien-hang/gia-hang-lich-su',
 	ThemGiaTien = '/gia-tien-hang/them-moi',
-	ThemThayDoiGiaTien = '/gia-tien-hang/them-gia-hang-chinh-sua',
+	// ThemThayDoiGiaTien = '/gia-tien-hang/them-gia-hang-chinh-sua',
 	ChinhSuaGiaTien = '/gia-tien-hang/chinh-sua',
+
+	// Giá tiền hàng chỉnh sửa
+	GiaTienHangChinhSua = '/gia-tien-hang-chinh-sua',
+	ThemThayDoiGiaTienChinhSua = '/gia-tien-hang-chinh-sua/them-gia-hang-chinh-sua',
 
 	// Nhà cung cấp
 	Xuong = '/xuong',
@@ -61,6 +66,7 @@ export const Menu: {
 		group: [
 			{title: 'Hàng hóa', icon: icons.hanghoa, path: PATH.HangHoaLoaiGo, pathActive: PATH.HangHoa},
 			{title: 'Giá tiền hàng', icon: icons.giatienhang, path: PATH.GiaTienHangHienTai, pathActive: PATH.GiaTien},
+			{title: 'Giá tiền hàng chỉnh sửa', icon: icons.giatienhangchinhsua, path: PATH.GiaTienHangChinhSua},
 		],
 	},
 	{

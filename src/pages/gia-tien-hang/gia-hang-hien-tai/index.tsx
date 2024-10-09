@@ -21,8 +21,8 @@ export default function Page() {
 						url: PATH.GiaTienHangHienTai,
 					},
 					{
-						title: 'Giá hàng chỉnh sửa',
-						url: PATH.GiaTienHangQuaKhu,
+						title: 'Lịch sử giá hàng',
+						url: PATH.GiaTienHangLichSu,
 					},
 				]}
 			>

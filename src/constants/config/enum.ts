@@ -18,6 +18,7 @@ export enum QUERY_KEY {
 	dropdown_nguoi_quan_ly,
 	dropdown_cong_ty,
 	dropdown_nguoi_quan_ly_nhap_hang,
+	dropdown_quan_ly_nhap_hang,
 
 	table_loai_go,
 	table_quoc_gia,

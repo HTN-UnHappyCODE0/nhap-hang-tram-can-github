@@ -31,6 +31,7 @@ const userServices = {
 			typeFind: CONFIG_TYPE_FIND;
 			isPaging: CONFIG_PAGING;
 			regencyUuid: string[];
+			parentUuid?: string | null;
 			provinceIDOwer: string;
 		},
 		tokenAxios?: any
