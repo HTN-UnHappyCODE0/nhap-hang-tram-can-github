@@ -178,6 +178,8 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 					timeEnd: _dateTo ? (_dateTo as string) : null,
 					warehouseUuid: '',
 					qualityUuid: '',
+					scalesStationUuid: '',
+					typeCheckDay: 0,
 				}),
 			}),
 		onSuccess(data) {
@@ -491,7 +493,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											),
 										},
 										{
-											title: 'Khối lượng hàng (tấn)',
+											title: 'Khối lượng hàng (Tấn)',
 											render: (data: IFormCreatePriceTagUpdate) => <>{convertWeight(data?.weightTotal)}</>,
 										},
 										{
@@ -678,7 +680,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											),
 										},
 										{
-											title: 'Khối lượng hàng (tấn)',
+											title: 'Khối lượng hàng (Tấn)',
 											render: (data: any) => <>{convertWeight(data?.weightTotal)}</>,
 										},
 										{
