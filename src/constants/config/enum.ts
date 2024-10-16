@@ -240,3 +240,10 @@ export enum STATUS_SITUATIONS {
 	DA_DUYET,
 	XU_LY_SAI,
 }
+
+export enum TYPE_LOGIN {
+	ADMIN = 1,
+	KHO,
+	KE_TOAN,
+	NHAP_HANG,
+}
