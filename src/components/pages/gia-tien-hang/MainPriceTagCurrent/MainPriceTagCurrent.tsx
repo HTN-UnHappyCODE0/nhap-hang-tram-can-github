@@ -49,20 +49,20 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 
 	const [dataUpdate, setDataUpdate] = useState<IPriceTag | null>(null);
 
-	useEffect(() => {
-		router.replace(
-			{
-				query: {
-					...router.query,
-					_status: CONFIG_STATUS.HOAT_DONG,
-				},
-			},
-			undefined,
-			{
-				scroll: false,
-			}
-		);
-	}, []);
+	// useEffect(() => {
+	// 	router.replace(
+	// 		{
+	// 			query: {
+	// 				...router.query,
+	// 				_status: CONFIG_STATUS.HOAT_DONG,
+	// 			},
+	// 		},
+	// 		undefined,
+	// 		{
+	// 			scroll: false,
+	// 		}
+	// 	);
+	// }, []);
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
 		queryFn: () =>
@@ -192,7 +192,8 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 						isPaging: CONFIG_PAGING.IS_PAGING,
 						isDescending: CONFIG_DESCENDING.NO_DESCENDING,
 						typeFind: CONFIG_TYPE_FIND.TABLE,
-						status: !!_status ? Number(_status) : null,
+						// status: !!_status ? Number(_status) : null,
+						status: CONFIG_STATUS.HOAT_DONG,
 						customerUuid: '',
 						specUuid: (_specUuid as string) || '',
 						productTypeUuid: (_productTypeUuid as string) || '',
