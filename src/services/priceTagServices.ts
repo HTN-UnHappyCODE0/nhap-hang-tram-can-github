@@ -112,6 +112,9 @@ const priceTagServices = {
 			priceTagUuid: string;
 			status: 0 | 1;
 			state: 0 | 1;
+			pricetagAfterUuid: string;
+			timeStart: string;
+			timeEnd: string;
 		},
 		tokenAxios?: any
 	) => {
@@ -185,6 +188,37 @@ const priceTagServices = {
 		tokenAxios?: any
 	) => {
 		return axiosClient.post(`/PriceTag/fix-pricetag`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
+	listFuturePrice: (
+		data: {
+			pageSize: number;
+			page: number;
+			keyword: string;
+			status: CONFIG_STATUS | null;
+			isDescending: CONFIG_DESCENDING;
+			typeFind: CONFIG_TYPE_FIND;
+			isPaging: CONFIG_PAGING;
+			userOwnerUuid: string | null;
+			productTypeUuid: string | null;
+			userOwnerCompanyUuid: string | null;
+			transportType: number | null;
+			specificationUuid: string | null;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/PriceTag/get-list-future-price`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
+	detailFuturePrice: (
+		data: {
+			uuid: string;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/PriceTag/detail-future-price`, data, {
 			cancelToken: tokenAxios,
 		});
 	},
