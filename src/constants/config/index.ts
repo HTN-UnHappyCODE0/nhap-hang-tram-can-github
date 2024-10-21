@@ -35,6 +35,10 @@ export enum PATH {
 	// ThemThayDoiGiaTien = '/gia-tien-hang/them-gia-hang-chinh-sua',
 	ChinhSuaGiaTien = '/gia-tien-hang/chinh-sua',
 
+	//Giá tiền hàng tương lai
+	GiaTienHangTuongLai = '/gia-tien-hang-tuong-lai',
+	ThemGiaTienHangTuongLai = '/gia-tien-hang-tuong-lai/them-moi',
+
 	// Giá tiền hàng chỉnh sửa
 	GiaTienHangChinhSua = '/gia-tien-hang-chinh-sua',
 	ThemThayDoiGiaTienChinhSua = '/gia-tien-hang-chinh-sua/them-gia-hang-chinh-sua',
@@ -67,6 +71,7 @@ export const Menu: {
 			{title: 'Hàng hóa', icon: icons.hanghoa, path: PATH.HangHoaLoaiGo, pathActive: PATH.HangHoa},
 			{title: 'Giá tiền hàng', icon: icons.giatienhang, path: PATH.GiaTienHangHienTai, pathActive: PATH.GiaTien},
 			{title: 'Giá tiền hàng chỉnh sửa', icon: icons.giatienhangchinhsua, path: PATH.GiaTienHangChinhSua},
+			{title: 'Giá tiền hàng tương lai', icon: icons.giatienhangtuonglai, path: PATH.GiaTienHangTuongLai},
 		],
 	},
 	{

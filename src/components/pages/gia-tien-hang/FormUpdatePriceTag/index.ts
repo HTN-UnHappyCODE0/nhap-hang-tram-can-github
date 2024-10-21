@@ -1,1 +1,1 @@
-export { default } from "./FormUpdatePriceTag";
+export {default} from './FormUpdatePriceTag';
