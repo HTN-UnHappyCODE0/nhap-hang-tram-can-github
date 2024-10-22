@@ -6,7 +6,7 @@ import Popup from '~/components/common/Popup';
 import {useRouter} from 'next/router';
 import Search from '~/components/common/Search';
 import FilterCustom from '~/components/common/FilterCustom';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
 	CONFIG_DESCENDING,
 	CONFIG_PAGING,
@@ -31,9 +31,13 @@ import priceTagServices from '~/services/priceTagServices';
 import FormUpdateFuturePriceTag from '../FormUpdateFuturePriceTag';
 import userServices from '~/services/userServices';
 import regencyServices from '~/services/regencyServices';
+import IconCustom from '~/components/common/IconCustom';
+import {HiOutlineLockClosed, HiOutlineLockOpen} from 'react-icons/hi';
+import Dialog from '~/components/common/Dialog';
 
 function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const {
 		_page,
@@ -48,7 +52,7 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 		_status,
 	} = router.query;
 
-	const [dataDelete, setDataDelete] = useState<any>(null);
+	const [dataChangeFuture, setDataChangeFuture] = useState<any>(null);
 	const [dataUpdate, setDataUpdate] = useState<any>(null);
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
@@ -154,25 +158,27 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 		enabled: listRegency.isSuccess,
 	});
 
-	// const funcChangeStatus = useMutation({
-	// 	mutationFn: () => {
-	// 		return httpRequest({
-	// 			showMessageFailed: true,
-	// 			showMessageSuccess: true,
-	// 			msgSuccess: scalesStation?.status == CONFIG_STATUS.HOAT_DONG ? 'Khóa trạm cân thành công!' : 'Mở khóa trạm cân thành công!',
-	// 			http: scalesStationServices.changeStatus({
-	// 				uuid: _id as string,
-	// 				status: scalesStation?.status! == CONFIG_STATUS.HOAT_DONG ? CONFIG_STATUS.BI_KHOA : CONFIG_STATUS.HOAT_DONG,
-	// 			}),
-	// 		});
-	// 	},
-	// 	onSuccess(data) {
-	// 		if (data) {
-	// 			setOpenChangeStatus(false);
-	// 			queryClient.invalidateQueries([QUERY_KEY.chi_tiet_tram_can, _id]);
-	// 		}
-	// 	},
-	// });
+	const funcChangeFuture = useMutation({
+		mutationFn: () => {
+			return httpRequest({
+				showMessageFailed: true,
+				showMessageSuccess: true,
+				msgSuccess:
+					dataChangeFuture?.status == CONFIG_STATUS.HOAT_DONG
+						? 'Khóa giá tiền tương lai thành công!'
+						: 'Mở khóa giá tiền tương lai thành công!',
+				http: priceTagServices.changeStatusFuturePrice({
+					uuid: dataChangeFuture as string,
+				}),
+			});
+		},
+		onSuccess(data) {
+			if (data) {
+				setDataChangeFuture(false);
+				queryClient.invalidateQueries([QUERY_KEY.table_gia_tien_hang_tuong_lai]);
+			}
+		},
+	});
 
 	const listPriceTag = useQuery(
 		[
@@ -232,7 +238,7 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 						/>
 					</div>
 
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
 							name='Quy cách'
@@ -242,7 +248,7 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 								name: v?.name,
 							}))}
 						/>
-					</div>
+					</div> */}
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
@@ -373,10 +379,10 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 							// 		</Link>
 							// 	),
 							// },
-							{
-								title: 'Quy cách',
-								render: (data: IPriceTagFuture) => <>{data?.customerSpecUu?.specUu?.name || '---'}</>,
-							},
+							// {
+							// 	title: 'Quy cách',
+							// 	render: (data: IPriceTagFuture) => <>{data?.customerSpecUu?.specUu?.name || '---'}</>,
+							// },
 
 							{
 								title: 'Ngày áp dụng',
@@ -406,26 +412,50 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 								),
 							},
 							// {
-							// 	title: 'Tác vụ',
-							// 	fixedRight: true,
+							// 	title: 'Tình trạng',
 							// 	render: (data: IPriceTagFuture) => (
-							// 		<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-							// 			<IconCustom
-							// 				delete
-							// 				icon={<Trash fontSize={20} fontWeight={600} />}
-							// 				tooltip='Xóa cầu cân'
-							// 				color='#777E90'
-							// 				onClick={() => setDataDelete(data)}
-							// 			/>
-							// 			<IconCustom
-							// 				icon={<LuPencil size='22' />}
-							// 				tooltip='Chỉnh sửa'
-							// 				color='#777E90'
-							// 				onClick={() => setDataUpdate(data)}
-							// 			/>
-							// 		</div>
+							// 		<>
+							// 			{data?.state == CONFIG_STATUS.HOAT_DONG && <span style={{color: '#2CAE39'}}>Đang mở </span>}
+							// 			{data?.state == CONFIG_STATUS.BI_KHOA && <span style={{color: '#D94212'}}>Đã hủy</span>}
+							// 		</>
 							// 	),
 							// },
+							{
+								title: 'Tác vụ',
+								fixedRight: true,
+								render: (data: IPriceTagFuture) => (
+									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+										{/* <IconCustom
+											delete
+											icon={<Trash fontSize={20} fontWeight={600} />}
+											tooltip='Xóa cầu cân'
+											color='#777E90'
+											onClick={() => setDataChangeFuture(data)}
+										/> */}
+										<IconCustom
+											edit
+											icon={
+												data?.state == CONFIG_STATUS.HOAT_DONG ? (
+													<HiOutlineLockClosed fontSize={22} fontWeight={600} />
+												) : (
+													<HiOutlineLockOpen fontSize={22} fontWeight={600} />
+												)
+											}
+											tooltip={data?.state == CONFIG_STATUS.HOAT_DONG ? 'Khóa' : 'Mở khóa'}
+											color='#777E90'
+											onClick={() => {
+												setDataChangeFuture(data?.uuid);
+											}}
+										/>
+										{/* <IconCustom
+											icon={<LuPencil size='22' />}
+											tooltip='Chỉnh sửa'
+											color='#777E90'
+											onClick={() => setDataUpdate(data)}
+										/> */}
+									</div>
+								),
+							},
 						]}
 					/>
 				</DataWrapper>
@@ -446,14 +476,14 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 				/>
 			</div>
 
-			{/* <Dialog
+			<Dialog
 				danger
-				open={!!dataDelete}
-				onClose={() => setDataDelete(null)}
-				title={'Xóa cầu cân'}
-				note={'Bạn có chắc chắn muốn xóa giá hàng này không??'}
-				onSubmit={funcDeleteScalesStation.mutate}
-			/> */}
+				open={!!dataChangeFuture}
+				onClose={() => setDataChangeFuture(null)}
+				title={'Khóa giá tiền tương lai'}
+				note={'Bạn có chắc muốn khóa giá tiền tương lai này không??'}
+				onSubmit={funcChangeFuture.mutate}
+			/>
 
 			{/* Popup */}
 			<Popup open={!!dataUpdate} onClose={() => setDataUpdate(null)}>

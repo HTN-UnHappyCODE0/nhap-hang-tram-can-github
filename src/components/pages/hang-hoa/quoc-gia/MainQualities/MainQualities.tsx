@@ -180,30 +180,30 @@ function MainQualities({}: PropsMainQualities) {
 								title: 'Trạng thái',
 								render: (data: IQualities) => <TagStatus status={data.status} />,
 							},
-							{
-								title: 'Tác vụ',
-								fixedRight: true,
-								render: (data: IQualities) => (
-									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-										{/* <IconCustom
-											edit
-											icon={<LuPencil fontSize={20} fontWeight={600} />}
-											tooltip='Chỉnh sửa'
-											color='#777E90'
-											onClick={() => setDataUpdate(data)}
-										/> */}
-										<IconCustom
-											lock
-											icon={<HiOutlineLockClosed size='22' />}
-											tooltip={data.status == CONFIG_STATUS.HOAT_DONG ? 'Khóa quốc gia' : 'Dùng quốc gia'}
-											color='#777E90'
-											onClick={() => {
-												setDataStatus(data);
-											}}
-										/>
-									</div>
-								),
-							},
+							// {
+							// 	title: 'Tác vụ',
+							// 	fixedRight: true,
+							// 	render: (data: IQualities) => (
+							// 		<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+							// 			{/* <IconCustom
+							// 				edit
+							// 				icon={<LuPencil fontSize={20} fontWeight={600} />}
+							// 				tooltip='Chỉnh sửa'
+							// 				color='#777E90'
+							// 				onClick={() => setDataUpdate(data)}
+							// 			/> */}
+							// 			<IconCustom
+							// 				lock
+							// 				icon={<HiOutlineLockClosed size='22' />}
+							// 				tooltip={data.status == CONFIG_STATUS.HOAT_DONG ? 'Khóa quốc gia' : 'Dùng quốc gia'}
+							// 				color='#777E90'
+							// 				onClick={() => {
+							// 					setDataStatus(data);
+							// 				}}
+							// 			/>
+							// 		</div>
+							// 	),
+							// },
 						]}
 					/>
 				</DataWrapper>

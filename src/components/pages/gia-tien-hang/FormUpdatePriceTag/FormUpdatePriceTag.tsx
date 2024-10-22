@@ -142,7 +142,7 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 				<div className={styles.main_form}>
 					<h4 className={styles.title}>Chỉnh sửa giá tiền hàng</h4>
 					<div className={styles.main}>
-						<div className={clsx('mt', 'col_2')}>
+						<div className={clsx('mt')}>
 							<Input
 								placeholder='Nhập nhà cung cấp'
 								name='customer'
@@ -153,6 +153,18 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 									</span>
 								}
 							/>
+						</div>
+						<div className={clsx('mt', 'col_2')}>
+							{/* <Input
+								placeholder='Quy cách'
+								name='spec'
+								readOnly={true}
+								label={
+									<span>
+										Quy cách <span style={{color: 'red'}}>*</span>
+									</span>
+								}
+							/> */}
 							<div>
 								<Input
 									placeholder='Loại hàng'
@@ -165,18 +177,6 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 									}
 								/>
 							</div>
-						</div>
-						<div className={clsx('mt', 'col_2')}>
-							<Input
-								placeholder='Quy cách'
-								name='spec'
-								readOnly={true}
-								label={
-									<span>
-										Quy cách <span style={{color: 'red'}}>*</span>
-									</span>
-								}
-							/>
 							<div>
 								<Input
 									placeholder='Phương thức vận chuyển'

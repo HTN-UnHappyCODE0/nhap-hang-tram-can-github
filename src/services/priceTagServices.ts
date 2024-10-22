@@ -90,7 +90,7 @@ const priceTagServices = {
 	addPricetagToCustomer: (
 		data: {
 			infoSpec: {
-				specUuid: string;
+				specUuid: string | null;
 				status: 0 | 1;
 				productTypeUuid: string;
 				priceTagUuid: string | null;
@@ -219,6 +219,37 @@ const priceTagServices = {
 		tokenAxios?: any
 	) => {
 		return axiosClient.post(`/PriceTag/detail-future-price`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
+	changeStatusFuturePrice: (
+		data: {
+			uuid: string;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/PriceTag/end-future-price`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
+	listDailyPrice: (
+		data: {
+			pageSize: number;
+			page: number;
+			keyword: string;
+			status: CONFIG_STATUS | null;
+			isDescending: CONFIG_DESCENDING;
+			typeFind: CONFIG_TYPE_FIND;
+			isPaging: CONFIG_PAGING;
+			userOwnerUuid: string | null;
+			productTypeUuid: string | null;
+			userOwnerCompanyUuid: string | null;
+			transportType: number | null;
+			dateCheck: string | null;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/PriceTag/get-list-daily-price`, data, {
 			cancelToken: tokenAxios,
 		});
 	},
