@@ -152,7 +152,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 				http: priceTagServices.addPricetagToCustomer({
 					infoSpec: [
 						{
-							specUuid: form.specUuid,
+							specUuid: null,
 							status: CONFIG_STATUS.HOAT_DONG,
 							state: form.state,
 							productTypeUuid: form.productTypeUuid,
@@ -175,9 +175,9 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 	});
 
 	const handleSubmit = async () => {
-		if (!form.specUuid) {
-			return toastWarn({msg: 'Vui lòng chọn loại quy cách!'});
-		}
+		// if (!form.specUuid) {
+		// 	return toastWarn({msg: 'Vui lòng chọn loại quy cách!'});
+		// }
 		if (!form.productTypeUuid) {
 			return toastWarn({msg: 'Vui lòng chọn loại hàng!'});
 		}
@@ -235,7 +235,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								))}
 							</Select>
 						</div>
-						<Select
+						{/* <Select
 							isSearch
 							name='specUuid'
 							placeholder='Lựa chọn quy cách'
@@ -256,7 +256,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 							{listSpecifications?.data?.map((value: any) => (
 								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
 							))}
-						</Select>
+						</Select> */}
 
 						<div className={styles.item}>
 							<label className={styles.label}>
@@ -330,7 +330,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								setDataChecked={setListCustomerChecked}
 							/>
 						</div>
-
+						{/* 
 						<div className={clsx(styles.checkbox_right)}>
 							<input
 								type='checkbox'
@@ -339,7 +339,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								checked={listCustomer?.data?.length == listCustomerChecked?.length}
 							/>
 							<label htmlFor='checkall'>Áp dụng cho tất cả nhà cung cấp </label>
-						</div>
+						</div> */}
 						<div className={clsx(styles.input_price, styles.checkbox_right)}>
 							<input
 								id={`state_spec_customer`}

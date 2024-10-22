@@ -58,5 +58,6 @@ export interface IPriceTagFuture {
 		uuid: string;
 	};
 	status: number;
+	state: number;
 	uuid: string;
 }

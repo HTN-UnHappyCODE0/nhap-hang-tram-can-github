@@ -133,7 +133,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 							}))}
 						/>
 					</div>
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
 							name='Quy cách'
@@ -143,7 +143,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 								name: v?.name,
 							}))}
 						/>
-					</div>
+					</div> */}
 
 					<div className={styles.filter}>
 						<FilterCustom

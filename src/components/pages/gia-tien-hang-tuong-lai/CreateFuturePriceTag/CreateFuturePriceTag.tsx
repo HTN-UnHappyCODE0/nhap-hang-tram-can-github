@@ -372,7 +372,7 @@ function CreateFuturePriceTag({}: PropsCreateFuturePriceTag) {
 							/>
 						</div>
 
-						<div className={clsx(styles.checkbox_right)}>
+						{/* <div className={clsx(styles.checkbox_right)}>
 							<input
 								type='checkbox'
 								onChange={handleCheckAll}
@@ -382,7 +382,7 @@ function CreateFuturePriceTag({}: PropsCreateFuturePriceTag) {
 							<label htmlFor='checkall'>
 								Áp dụng cho tất cả nhà cung cấp <span style={{color: 'red'}}>*</span>
 							</label>
-						</div>
+						</div> */}
 						{/* <div className={clsx(styles.input_price, styles.checkbox_right)}>
 							<input
 								id={`state_spec_customer`}

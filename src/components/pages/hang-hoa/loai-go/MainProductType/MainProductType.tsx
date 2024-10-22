@@ -218,30 +218,30 @@ function MainProductType({}: PropsMainProductType) {
 									</TippyHeadless>
 								),
 							},
-							{
-								title: 'Tác vụ',
-								fixedRight: true,
-								render: (data: IProductType) => (
-									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-										{/* <IconCustom
-											edit
-											icon={<LuPencil fontSize={20} fontWeight={600} />}
-											tooltip='Chỉnh sửa'
-											color='#777E90'
-											onClick={() => setDataUpdate(data)}
-										/> */}
-										<IconCustom
-											lock
-											icon={<HiOutlineLockClosed size='22' />}
-											tooltip={data.status == CONFIG_STATUS.HOAT_DONG ? 'Khóa loại hàng' : 'Dùng loại hàng'}
-											color='#777E90'
-											onClick={() => {
-												setDataStatus(data);
-											}}
-										/>
-									</div>
-								),
-							},
+							// {
+							// 	title: 'Tác vụ',
+							// 	fixedRight: true,
+							// 	render: (data: IProductType) => (
+							// 		<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+							// 			{/* <IconCustom
+							// 				edit
+							// 				icon={<LuPencil fontSize={20} fontWeight={600} />}
+							// 				tooltip='Chỉnh sửa'
+							// 				color='#777E90'
+							// 				onClick={() => setDataUpdate(data)}
+							// 			/> */}
+							// 			<IconCustom
+							// 				lock
+							// 				icon={<HiOutlineLockClosed size='22' />}
+							// 				tooltip={data.status == CONFIG_STATUS.HOAT_DONG ? 'Khóa loại hàng' : 'Dùng loại hàng'}
+							// 				color='#777E90'
+							// 				onClick={() => {
+							// 					setDataStatus(data);
+							// 				}}
+							// 			/>
+							// 		</div>
+							// 	),
+							// },
 						]}
 					/>
 				</DataWrapper>

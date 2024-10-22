@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {IDetailCustomer, PropsPageDetailWorkshop} from './interfaces';
+import {IDetailCustomer, IlistCustomerSpec, PropsPageDetailWorkshop} from './interfaces';
 import styles from './PageDetailWorkshop.module.scss';
 import {IoArrowBackOutline} from 'react-icons/io5';
 import Button from '~/components/common/Button';
@@ -85,31 +85,31 @@ function PageDetailWorkshop({}: PropsPageDetailWorkshop) {
 		},
 	});
 
-	const listPriceTagCustomer = useQuery([QUERY_KEY.table_hang_hoa_cua_khach_hang, _id, _page, _pageSize], {
-		queryFn: () =>
-			httpRequest({
-				isList: true,
-				http: priceTagServices.listPriceTag({
-					page: Number(_page) || 1,
-					pageSize: Number(_pageSize) || 50,
-					keyword: '',
-					isPaging: CONFIG_PAGING.IS_PAGING,
-					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
-					typeFind: CONFIG_TYPE_FIND.TABLE,
-					status: null,
-					customerUuid: _id as string,
-					specUuid: '',
-					productTypeUuid: '',
-					priceTagUuid: '',
-					state: null,
-					transportType: null,
-				}),
-			}),
-		select(data) {
-			return data;
-		},
-		enabled: !!_id,
-	});
+	// const listPriceTagCustomer = useQuery([QUERY_KEY.table_hang_hoa_cua_khach_hang, _id, _page, _pageSize], {
+	// 	queryFn: () =>
+	// 		httpRequest({
+	// 			isList: true,
+	// 			http: priceTagServices.listPriceTag({
+	// 				page: Number(_page) || 1,
+	// 				pageSize: Number(_pageSize) || 50,
+	// 				keyword: '',
+	// 				isPaging: CONFIG_PAGING.IS_PAGING,
+	// 				isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+	// 				typeFind: CONFIG_TYPE_FIND.TABLE,
+	// 				status: null,
+	// 				customerUuid: _id as string,
+	// 				specUuid: '',
+	// 				productTypeUuid: '',
+	// 				priceTagUuid: '',
+	// 				state: null,
+	// 				transportType: null,
+	// 			}),
+	// 		}),
+	// 	select(data) {
+	// 		return data;
+	// 	},
+	// 	enabled: !!_id,
+	// });
 
 	return (
 		<div className={styles.container}>
@@ -292,37 +292,37 @@ function PageDetailWorkshop({}: PropsPageDetailWorkshop) {
 			<div className={clsx('mt')}>
 				<div className={styles.table}>
 					<DataWrapper
-						data={listPriceTagCustomer?.data?.items || []}
-						loading={listPriceTagCustomer?.isLoading}
+						data={detailCustomer?.customerSpec || []}
+						// loading={detailCustomer.isloading}
 						noti={<Noti disableButton des='Hiện tại chưa có hàng hóa nào!' />}
 					>
 						<Table
-							data={listPriceTagCustomer?.data?.items || []}
+							data={detailCustomer?.customerSpec || []}
 							column={[
 								{
 									title: 'STT',
-									render: (data: any, index: number) => <>{index + 1}</>,
+									render: (data: IlistCustomerSpec, index: number) => <>{index + 1}</>,
 								},
 								{
 									title: 'Loại hàng',
 									fixedLeft: true,
-									render: (data: any) => <>{data?.productTypeUu?.name}</>,
+									render: (data: IlistCustomerSpec) => <>{data?.productTypeUu?.name}</>,
 								},
 								{
 									title: 'Quốc gia',
-									render: (data: any) => <>{data?.qualityUu?.name}</>,
+									render: (data: IlistCustomerSpec) => <>{data?.qualityUu?.name}</>,
 								},
 								{
 									title: 'Quy cách',
-									render: (data: any) => <>{data?.specUu?.name}</>,
+									render: (data: IlistCustomerSpec) => <>{data?.specUu?.name}</>,
 								},
 								{
 									title: 'Bãi',
-									render: (data: any) => <>{data?.storageUu?.name || '---'}</>,
+									render: (data: IlistCustomerSpec) => <>{data?.storageUu?.name || '---'}</>,
 								},
 								{
 									title: 'Vận chuyển',
-									render: (data: any) => (
+									render: (data: IlistCustomerSpec) => (
 										<>
 											{data?.transportType == TYPE_TRANSPORT.DUONG_BO && 'Đường bộ'}
 											{data?.transportType == TYPE_TRANSPORT.DUONG_THUY && 'Đường thủy'}
@@ -331,18 +331,18 @@ function PageDetailWorkshop({}: PropsPageDetailWorkshop) {
 								},
 								{
 									title: 'Giá tiền (VND)',
-									render: (data: any) => (
+									render: (data: IlistCustomerSpec) => (
 										<p style={{fontWeight: '600', color: '#3772FF'}}>{convertCoin(data?.pricetagUu?.amount)}</p>
 									),
 								},
 								{
 									title: 'Cung cấp',
-									render: (data: any) => <TagStatusSpecCustomer status={data.state} />,
+									render: (data: IlistCustomerSpec) => <TagStatusSpecCustomer status={data.state} />,
 								},
 								{
 									title: 'Tác vụ',
 									fixedRight: true,
-									render: (data: any) => (
+									render: (data: IlistCustomerSpec) => (
 										<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
 											<IconCustom
 												edit
@@ -357,12 +357,12 @@ function PageDetailWorkshop({}: PropsPageDetailWorkshop) {
 							]}
 						/>
 					</DataWrapper>
-					<Pagination
+					{/* <Pagination
 						currentPage={Number(_page) || 1}
 						pageSize={Number(_pageSize) || 50}
 						total={listPriceTagCustomer?.data?.pagination?.totalCount}
 						dependencies={[_id, _pageSize]}
-					/>
+					/> */}
 				</div>
 			</div>
 

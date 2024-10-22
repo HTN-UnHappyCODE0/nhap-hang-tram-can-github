@@ -266,7 +266,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 							}))}
 						/>
 					</div>
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
 							name='Quy cách'
@@ -276,7 +276,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								name: v?.name,
 							}))}
 						/>
-					</div>
+					</div> */}
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
@@ -363,10 +363,10 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								title: 'Loại hàng',
 								render: (data: IPriceTag) => <>{data?.productTypeUu?.name || '---'}</>,
 							},
-							{
-								title: 'Quy cách',
-								render: (data: IPriceTag) => <>{data?.specUu?.name || '---'}</>,
-							},
+							// {
+							// 	title: 'Quy cách',
+							// 	render: (data: IPriceTag) => <>{data?.specUu?.name || '---'}</>,
+							// },
 							{
 								title: 'Vận chuyển',
 								render: (data: IPriceTag) => (
