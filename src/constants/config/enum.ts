@@ -31,6 +31,7 @@ export enum QUERY_KEY {
 	table_hang_hoa_cua_khach_hang,
 	table_cong_ty,
 	table_gia_tien_hang_tuong_lai,
+	table_gia_tien_lich_su,
 
 	chi_tiet_quy_cach,
 	chi_tiet_gia_tien_chinh_sua,

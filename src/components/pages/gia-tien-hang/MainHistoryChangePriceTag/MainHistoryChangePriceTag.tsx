@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {PropsMainHistoryChangePriceTag} from './interfaces';
+import {IPriceTagChangeHistory, PropsMainHistoryChangePriceTag} from './interfaces';
 import styles from './MainHistoryChangePriceTag.module.scss';
 import Pagination from '~/components/common/Pagination';
 import DataWrapper from '~/components/common/DataWrapper';
@@ -26,10 +26,17 @@ import Search from '~/components/common/Search';
 import userServices from '~/services/userServices';
 import wareServices from '~/services/wareServices';
 import regencyServices from '~/services/regencyServices';
+import moment from 'moment';
+import Link from 'next/link';
+import {convertCoin} from '~/common/funcs/convertCoin';
+import TagStatusSpecCustomer from '../MainPriceTagCurrent/TagStatusSpecCustomer';
+import DatePickerFilter from '~/components/common/DatePickerFilter';
 
 function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 	const {_page, _pageSize, _keyword, _userOwnerCompanyUuid, _parentUserUuid, _productTypeUuid, _userOwnerUuid, _transportType, _status} =
 		router.query;
+
+	const [dateCheck, setDateCheck] = useState<Date | null>(null);
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
 		queryFn: () =>
@@ -134,9 +141,9 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 		enabled: listRegency.isSuccess,
 	});
 
-	const listPriceTag = useQuery(
+	const listPriceTagChange = useQuery(
 		[
-			QUERY_KEY.table_gia_tien_hang,
+			QUERY_KEY.table_gia_tien_lich_su,
 			_page,
 			_userOwnerUuid,
 			_userOwnerCompanyUuid,
@@ -145,6 +152,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 			_productTypeUuid,
 			_transportType,
 			_status,
+			dateCheck,
 		],
 		{
 			queryFn: () =>
@@ -163,7 +171,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 						transportType: !!_transportType ? Number(_transportType) : null,
 						userOwnerCompanyUuid: (_userOwnerCompanyUuid as string) || '',
 						userOwnerUuid: (_userOwnerUuid as string) || '',
-						dateCheck: null,
+						dateCheck: dateCheck ? moment(dateCheck).format('YYYY-MM-DD') : null,
 					}),
 				}),
 			select(data) {
@@ -208,9 +216,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 							]}
 						/>
 					</div>
-					{/* <div className={styles.filter}>
-						<DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.TODAY} />
-					</div> */}
+
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
@@ -259,6 +265,17 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 							}))}
 						/>
 					</div>
+					<div className={styles.filter}>
+						{/* <DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.TODAY} /> */}
+						<DatePickerFilter
+							icon={true}
+							placeholder='Hôm qua'
+							value={dateCheck}
+							onSetValue={setDateCheck}
+							name='dateCheck'
+							onClean={true}
+						/>
+					</div>
 				</div>
 				{/* <div>
 					<Button
@@ -273,24 +290,53 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 			</div>
 
 			<div className={styles.table}>
-				<DataWrapper data={[]} noti={<Noti disableButton title='Dữ liệu trống!' des='Hiện tại chưa có  nào, thêm ngay?' />}>
+				<DataWrapper
+					data={listPriceTagChange?.data?.items || []}
+					loading={listPriceTagChange?.isLoading}
+					noti={<Noti disableButton title='Dữ liệu trống!' des='Hiện tại chưa có giá nào, thêm ngay?' />}
+				>
 					<Table
-						data={[]}
+						data={listPriceTagChange?.data?.items || []}
 						column={[
 							{
 								title: 'STT',
-								render: (data: any, index: number) => <>{index + 1}</>,
+								render: (data: IPriceTagChangeHistory, index: number) => <>{index + 1}</>,
 							},
 							{
 								title: 'Nhà cung cấp',
-								render: (data: any) => <>{'---'}</>,
+								render: (data: IPriceTagChangeHistory) => (
+									<Link href={`/xuong/${data?.customerSpecUu?.customerUu?.uuid}`} className={styles.link}>
+										{data?.customerSpecUu?.customerUu?.name || '---'}
+									</Link>
+								),
+							},
+							{
+								title: 'Giá tiền (VND)',
+								render: (data: IPriceTagChangeHistory) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
+							},
+							{
+								title: 'Loại hàng',
+								render: (data: IPriceTagChangeHistory) => <>{data?.customerSpecUu?.productTypeUu?.name || '---'}</>,
+							},
+							{
+								title: 'Vận chuyển',
+								render: (data: IPriceTagChangeHistory) => (
+									<>
+										{data?.customerSpecUu?.transportType == TYPE_TRANSPORT.DUONG_BO && 'Đường bộ'}
+										{data?.customerSpecUu?.transportType == TYPE_TRANSPORT.DUONG_THUY && 'Đường thủy'}
+									</>
+								),
+							},
+							{
+								title: 'Cung cấp',
+								render: (data: IPriceTagChangeHistory) => <TagStatusSpecCustomer status={data?.customerSpecUu?.state} />,
 							},
 						]}
 					/>
 				</DataWrapper>
-				{/* <Pagination
+				<Pagination
 					currentPage={Number(_page) || 1}
-					total={20}
+					total={listPriceTagChange?.data?.pagination?.totalCount}
 					pageSize={Number(_pageSize) || 50}
 					dependencies={[
 						_pageSize,
@@ -302,7 +348,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 						_transportType,
 						_status,
 					]}
-				/> */}
+				/>
 			</div>
 		</div>
 	);
