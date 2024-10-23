@@ -34,6 +34,7 @@ import regencyServices from '~/services/regencyServices';
 import IconCustom from '~/components/common/IconCustom';
 import {HiOutlineLockClosed, HiOutlineLockOpen} from 'react-icons/hi';
 import Dialog from '~/components/common/Dialog';
+import {CloseCircle} from 'iconsax-react';
 
 function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 	const router = useRouter();
@@ -424,36 +425,24 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 								title: 'Tác vụ',
 								fixedRight: true,
 								render: (data: IPriceTagFuture) => (
-									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-										{/* <IconCustom
-											delete
-											icon={<Trash fontSize={20} fontWeight={600} />}
-											tooltip='Xóa cầu cân'
-											color='#777E90'
-											onClick={() => setDataChangeFuture(data)}
-										/> */}
-										<IconCustom
-											edit
-											icon={
-												data?.state == CONFIG_STATUS.HOAT_DONG ? (
-													<HiOutlineLockClosed fontSize={22} fontWeight={600} />
-												) : (
-													<HiOutlineLockOpen fontSize={22} fontWeight={600} />
-												)
-											}
-											tooltip={data?.state == CONFIG_STATUS.HOAT_DONG ? 'Khóa' : 'Mở khóa'}
-											color='#777E90'
-											onClick={() => {
-												setDataChangeFuture(data?.uuid);
-											}}
-										/>
-										{/* <IconCustom
-											icon={<LuPencil size='22' />}
-											tooltip='Chỉnh sửa'
-											color='#777E90'
-											onClick={() => setDataUpdate(data)}
-										/> */}
-									</div>
+									<>
+										{data?.status == TYPE_PRICE_FUTURE.CHUA_AP_DUNG ||
+										data?.status == TYPE_PRICE_FUTURE.DANG_AP_DUNG ? (
+											<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+												<IconCustom
+													edit
+													icon={<CloseCircle fontSize={22} fontWeight={600} />}
+													tooltip={'Kết thúc'}
+													color='#777E90'
+													onClick={() => {
+														setDataChangeFuture(data?.uuid);
+													}}
+												/>
+											</div>
+										) : (
+											''
+										)}
+									</>
 								),
 							},
 						]}
