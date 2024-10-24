@@ -66,7 +66,7 @@ function FormLogin({}: PropsFormLogin) {
 						uuid: data.uuid,
 						avatar: data.avatar,
 						fullname: data.fullname,
-						regencyUuid: data.regencyUuid,
+						regencyCode: data.regencyCode,
 						userUuid: data.userUuid,
 					})
 				);

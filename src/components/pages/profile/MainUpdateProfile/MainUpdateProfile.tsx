@@ -213,7 +213,7 @@ function MainUpdateProfile({}: PropsMainUpdateProfile) {
 				store.dispatch(
 					setInfoUser({
 						avatar: variables?.path || '',
-						regencyUuid: infoUser?.regencyUuid || '',
+						regencyCode: infoUser?.regencyCode || null,
 						userUuid: infoUser?.userUuid || '',
 						uuid: infoUser?.uuid || '',
 						userName: infoUser?.userName || '',

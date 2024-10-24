@@ -1,12 +1,17 @@
 import Head from 'next/head';
-import {Fragment, ReactElement} from 'react';
+import {ReactElement} from 'react';
 import BaseLayout from '~/components/layouts/BaseLayout';
 import WrapperContainer from '~/components/layouts/WrapperContainer';
 import PageUpdateWorkshop from '~/components/pages/xuong/PageUpdateWorkshop';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import {REGENCY_CODE} from '~/constants/config/enum';
 
 export default function Page() {
 	return (
-		<Fragment>
+		<CheckRegencyCode
+			isPage={true}
+			regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG, REGENCY_CODE.NHAN_VIEN_THI_TRUONG]}
+		>
 			<Head>
 				<title>Chỉnh sửa nhà cung cấp</title>
 				<meta name='description' content='Chỉnh sửa nhà cung cấp' />
@@ -16,7 +21,7 @@ export default function Page() {
 			<WrapperContainer bg={true}>
 				<PageUpdateWorkshop />
 			</WrapperContainer>
-		</Fragment>
+		</CheckRegencyCode>
 	);
 }
 

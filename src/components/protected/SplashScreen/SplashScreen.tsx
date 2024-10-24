@@ -10,10 +10,9 @@ import styles from './SplashScreen.module.scss';
 import {useSelector} from 'react-redux';
 import {getItemStorage, setItemStorage} from '~/common/funcs/localStorage';
 import {KEY_STORE} from '~/constants/config';
-import {setIp, setIsMobile, setLoading, setRememberPassword} from '~/redux/reducer/site';
+import {setIsMobile, setLoading, setRememberPassword} from '~/redux/reducer/site';
 
 import * as loading from '../../../../public/static/anim/loadingScreen.json';
-import axios from 'axios';
 import {setDataLoginStorage, setStateLogin, setToken} from '~/redux/reducer/auth';
 import {setInfoUser} from '~/redux/reducer/user';
 
@@ -51,12 +50,9 @@ function SplashScreen({}: PropsSplashScreen) {
 
 			const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 			store.dispatch(setIsMobile(isMobile));
-
-			// axios.get('https://api.ipify.org?format=json').then((res) => store.dispatch(setIp(res.data.ip)));
 		})();
 	}, []);
 
-	// Lưu vào localStorage
 	useEffect(() => {
 		if (!loading) {
 			setItemStorage(KEY_STORE, {

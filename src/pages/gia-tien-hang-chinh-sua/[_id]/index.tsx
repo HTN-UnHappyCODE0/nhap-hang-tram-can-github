@@ -1,12 +1,14 @@
 import Head from 'next/head';
-import {Fragment, ReactElement} from 'react';
+import {ReactElement} from 'react';
 import BaseLayout from '~/components/layouts/BaseLayout';
 import WrapperContainer from '~/components/layouts/WrapperContainer';
 import MainDetailPriceTagUpdate from '~/components/pages/gia-tien-hang-chinh-sua/MainDetailPriceTagUpdate';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import {REGENCY_CODE} from '~/constants/config/enum';
 
 export default function Page() {
 	return (
-		<Fragment>
+		<CheckRegencyCode isPage={true} regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}>
 			<Head>
 				<title>Chi tiết giá tiền hàng cập nhật</title>
 				<meta name='description' content='Chi tiết giá tiền hàng cập nhật' />
@@ -16,7 +18,7 @@ export default function Page() {
 			<WrapperContainer bg={true}>
 				<MainDetailPriceTagUpdate />
 			</WrapperContainer>
-		</Fragment>
+		</CheckRegencyCode>
 	);
 }
 

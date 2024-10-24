@@ -233,6 +233,19 @@ export enum REGENCY_NAME {
 	'Giám Đốc' = '1',
 }
 
+// Permisstion regency
+export enum REGENCY_CODE {
+	GIAM_DOC = 1,
+	PHO_GIAM_DOC,
+	QUAN_LY_KHO_KCS,
+	QUAN_LY_NHAP_HANG,
+	QUAN_LY_XE,
+	NHAN_VIEN_CAN,
+	NHAN_VIEN_THI_TRUONG,
+	NHAN_VIEN_KCS,
+	NHAN_VIEN_KE_TOAN,
+}
+
 // PAGE QUY CÁCH
 export enum TYPE_RULER {
 	NHO_HON,

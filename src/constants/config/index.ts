@@ -1,5 +1,5 @@
 import icons from '../images/icons';
-import {TYPE_DATE} from './enum';
+import {REGENCY_CODE, TYPE_DATE} from './enum';
 
 export const MAXIMUM_FILE = 10; //MB
 
@@ -59,26 +59,96 @@ export const Menu: {
 		pathActive?: string;
 		title: string;
 		icon: any;
+		regencys: number[];
 	}[];
 }[] = [
 	{
 		title: 'overview',
-		group: [{title: 'Tổng quan', icon: icons.tongQuan, path: PATH.Home}],
+		group: [
+			{
+				title: 'Tổng quan',
+				icon: icons.tongQuan,
+				path: PATH.Home,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+		],
 	},
 	{
 		title: 'Nhập hàng',
 		group: [
-			{title: 'Hàng hóa', icon: icons.hanghoa, path: PATH.HangHoaLoaiGo, pathActive: PATH.HangHoa},
-			{title: 'Giá tiền hàng', icon: icons.giatienhang, path: PATH.GiaTienHangHienTai, pathActive: PATH.GiaTien},
-			{title: 'Giá tiền hàng chỉnh sửa', icon: icons.giatienhangchinhsua, path: PATH.GiaTienHangChinhSua},
-			{title: 'Giá tiền hàng tương lai', icon: icons.giatienhangtuonglai, path: PATH.GiaTienHangTuongLai},
+			{
+				title: 'Hàng hóa',
+				icon: icons.hanghoa,
+				path: PATH.HangHoaLoaiGo,
+				pathActive: PATH.HangHoa,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+			{
+				title: 'Giá tiền hàng',
+				icon: icons.giatienhang,
+				path: PATH.GiaTienHangHienTai,
+				pathActive: PATH.GiaTien,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+			{
+				title: 'Giá tiền hàng chỉnh sửa',
+				icon: icons.giatienhangchinhsua,
+				path: PATH.GiaTienHangChinhSua,
+				regencys: [REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG],
+			},
+			{
+				title: 'Giá tiền hàng tương lai',
+				icon: icons.giatienhangtuonglai,
+				path: PATH.GiaTienHangTuongLai,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
 		],
 	},
 	{
 		title: 'Nhà cung cấp',
 		group: [
-			{title: 'Nhà cung cấp', icon: icons.xuong, path: PATH.Xuong},
-			{title: 'Công ty', icon: icons.congty, path: PATH.NhaCungCap},
+			{
+				title: 'Nhà cung cấp',
+				icon: icons.xuong,
+				path: PATH.Xuong,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+			{
+				title: 'Công ty',
+				icon: icons.congty,
+				path: PATH.NhaCungCap,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
 		],
 	},
 ];

@@ -12,6 +12,7 @@ import icons from '~/constants/images/icons';
 import styles from './MenuTab.module.scss';
 import {useRouter} from 'next/router';
 import {useSelector} from 'react-redux';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 
 function MenuTab({}: PropsMenuTab) {
 	const router = useRouter();
@@ -50,22 +51,23 @@ function MenuTab({}: PropsMenuTab) {
 						<div className={styles.groupTitle}>{v.title}</div>
 						<div className={styles.menuGroup}>
 							{v.group.map((item, j) => (
-								<Link
-									onClick={() => {
-										isMobile && context?.setShowFull!(!context?.showFull);
-									}}
-									href={item.path}
-									className={clsx(styles.itemGroup, {
-										[styles.active]: checkActive(item.path) || checkActive(item.pathActive!),
-										[styles.small]: !context?.showFull,
-									})}
-									key={j}
-								>
-									<i>
-										<ImageFill style_1_1='true' src={item.icon} />
-									</i>
-									{context?.showFull ? <p className={styles.item_text}>{item.title}</p> : null}
-								</Link>
+								<CheckRegencyCode isPage={false} regencys={item.regencys} key={j}>
+									<Link
+										onClick={() => {
+											isMobile && context?.setShowFull!(!context?.showFull);
+										}}
+										href={item.path}
+										className={clsx(styles.itemGroup, {
+											[styles.active]: checkActive(item.path) || checkActive(item.pathActive!),
+											[styles.small]: !context?.showFull,
+										})}
+									>
+										<i>
+											<ImageFill style_1_1='true' src={item.icon} />
+										</i>
+										{context?.showFull ? <p className={styles.item_text}>{item.title}</p> : null}
+									</Link>
+								</CheckRegencyCode>
 							))}
 						</div>
 					</div>
