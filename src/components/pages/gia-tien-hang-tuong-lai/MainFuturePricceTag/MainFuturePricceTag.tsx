@@ -164,10 +164,7 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 			return httpRequest({
 				showMessageFailed: true,
 				showMessageSuccess: true,
-				msgSuccess:
-					dataChangeFuture?.status == CONFIG_STATUS.HOAT_DONG
-						? 'Khóa giá tiền tương lai thành công!'
-						: 'Mở khóa giá tiền tương lai thành công!',
+				msgSuccess: 'kết thúc giá tiền tương lai thành công!',
 				http: priceTagServices.changeStatusFuturePrice({
 					uuid: dataChangeFuture as string,
 				}),

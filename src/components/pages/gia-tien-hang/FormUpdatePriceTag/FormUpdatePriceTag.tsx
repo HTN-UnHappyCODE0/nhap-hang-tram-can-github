@@ -134,6 +134,26 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 			return toastWarn({msg: 'Không tìm thấy giá thay đổi!'});
 		}
 
+		if (!!form.timeStart) {
+			const timeStart = new Date(form.timeStart);
+			if (timeStart < new Date()) {
+				return toastWarn({msg: 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!'});
+			}
+		}
+
+		if (!!form.timeEnd) {
+			const timeStart = new Date(form.timeStart);
+			const timeEnd = new Date(form.timeEnd);
+
+			if (timeEnd < new Date()) {
+				return toastWarn({msg: 'Ngày kết thúc không được nhỏ hơn ngày hiện tại!'});
+			}
+
+			if (timeStart > timeEnd) {
+				return toastWarn({msg: 'Ngày kết thúc không nhỏ hơn ngày bắt đầu!'});
+			}
+		}
+
 		return funcUpdateSpecification.mutate();
 	};
 
