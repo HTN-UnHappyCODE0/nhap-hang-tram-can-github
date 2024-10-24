@@ -73,3 +73,53 @@
 	flex: 1;
 	overflow: auto;
 }
+
+.detail {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.action {
+	position: relative;
+	cursor: pointer;
+	width: fit-content;
+	height: fit-content;
+	transition: 0.3s;
+
+	&:hover {
+		.icon_warn {
+			opacity: 0.6;
+		}
+		z-index: 100;
+		.note {
+			display: block;
+		}
+	}
+
+	.note {
+		position: absolute;
+		bottom: calc(100% + 4px);
+		right: 0;
+		width: max-content;
+		z-index: 10;
+		display: none;
+		background-color: #fff;
+		border-radius: 4px;
+		background: var(--bg-light);
+		border: 1px solid var(--border-color);
+		padding: 4px 8px;
+
+		& > p {
+			color: var(--neutrals-4);
+			font-size: 14px;
+			font-weight: 500;
+
+			span {
+				margin-left: 6px;
+				color: var(--neutrals-3);
+				font-weight: 600;
+			}
+		}
+	}
+}

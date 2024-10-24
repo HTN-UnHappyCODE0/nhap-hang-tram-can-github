@@ -372,6 +372,10 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 								title: 'Giá tiền (VND)',
 								render: (data: IPriceTagFuture) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
+							{
+								title: 'Giá tiền sau ngày kết thúc (VND)',
+								render: (data: IPriceTagFuture) => <>{convertCoin(data?.pricetagAfterUu?.amount) || 0} </>,
+							},
 							// {
 							// 	title: 'Công ty',
 							// 	render: (data: IPriceTagFuture) => (

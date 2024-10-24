@@ -210,7 +210,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 					</div>
 				</div>
 				<div className={styles.form}>
-					<div className={clsx('mt', 'col_3')}>
+					<div className={clsx('mt', 'col_2')}>
 						<div>
 							<Select
 								isSearch

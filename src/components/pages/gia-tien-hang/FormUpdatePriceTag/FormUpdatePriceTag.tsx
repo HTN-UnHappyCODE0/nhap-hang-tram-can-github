@@ -22,8 +22,9 @@ import {toastWarn} from '~/common/funcs/toast';
 import Loading from '~/components/common/Loading';
 import clsx from 'clsx';
 import DatePicker from '~/components/common/DatePicker';
-import {time} from 'console';
-import {TimerStart} from 'iconsax-react';
+import {PiSealWarningFill} from 'react-icons/pi';
+import Moment from 'react-moment';
+import moment from 'moment';
 
 function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 	const queryClient = useQueryClient();
@@ -111,8 +112,8 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 					state: form.state,
 					status: CONFIG_STATUS.HOAT_DONG,
 					pricetagAfterUuid: priceTagFuture.id === '' ? String(priceTagFuture.name) : priceTagFuture.id,
-					timeStart: form.timeStart,
-					timeEnd: form.timeEnd,
+					timeStart: moment(form.timeStart).startOf('day').toISOString(),
+					timeEnd: moment(form.timeEnd).endOf('day').toISOString(),
 				}),
 			}),
 		onSuccess(data) {
@@ -194,12 +195,8 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 						<div className={clsx('mt', 'col_2')}>
 							<DatePicker
 								icon={true}
-								label={
-									<span>
-										Áp dụng từ ngày <span style={{color: 'red'}}>*</span>
-									</span>
-								}
-								placeholder='Chọn ngày áp dụng'
+								label={<span>Từ ngày</span>}
+								placeholder='Chọn ngày'
 								value={form?.timeStart}
 								onSetValue={(date) =>
 									setForm((prev: any) => ({
@@ -213,8 +210,8 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 							<div>
 								<DatePicker
 									icon={true}
-									label={<span>Ngày kết thúc</span>}
-									placeholder='Chọn ngày kết thúc'
+									label={<span>Đến ngày</span>}
+									placeholder='Chọn ngày'
 									value={form?.timeEnd}
 									onSetValue={(date) => {
 										setForm((prev: any) => ({
@@ -242,9 +239,28 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 								data={priceTag}
 								setData={setPriceTag}
 								label={
-									<span>
-										Giá tiền áp dụng <span style={{color: 'red'}}>*</span>
-									</span>
+									<div className={styles.detail}>
+										<span>Giá tiền áp dụng</span>
+										<div className={styles.action}>
+											<PiSealWarningFill size={20} color='#2D74FF' className={styles.icon_warn} />
+											<div className={styles.note}>
+												<p>
+													Giá tiền áp dụng từ ngày{' '}
+													<>
+														{form?.timeStart ? (
+															<Moment date={form?.timeStart} format='DD/MM/YYYY' />
+														) : (
+															'--/--/----'
+														)}
+													</>{' '}
+													đến ngày{' '}
+													<>
+														{form?.timeEnd ? <Moment date={form?.timeEnd} format='DD/MM/YYYY' /> : '--/--/----'}
+													</>
+												</p>
+											</div>
+										</div>
+									</div>
 								}
 								placeholder='Nhập giá tiền'
 							/>
@@ -259,9 +275,24 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 									data={priceTagFuture}
 									setData={setPriceTagFuture}
 									label={
-										<span>
-											Giá tiền tương lai <span style={{color: 'red'}}>*</span>
-										</span>
+										<div className={styles.detail}>
+											<span>Giá tiền sau khi kết thúc</span>
+											<div className={styles.action}>
+												<PiSealWarningFill size={20} color='#2D74FF' className={styles.icon_warn} />
+												<div className={styles.note}>
+													<p>
+														giá tiền pháp dụng sau ngày{' '}
+														<>
+															{form?.timeEnd ? (
+																<Moment date={form?.timeEnd} format='DD/MM/YYYY' />
+															) : (
+																'--/--/----'
+															)}
+														</>
+													</p>
+												</div>
+											</div>
+										</div>
 									}
 									placeholder='Nhập giá tiền'
 								/>
