@@ -20,6 +20,7 @@ export enum QUERY_KEY {
 	dropdown_nguoi_quan_ly_nhap_hang,
 	dropdown_quan_ly_nhap_hang,
 	dropdown_gia_tien_hang_tuong_lai,
+	dropdown_nguoi_quan_ly_nhan_vien,
 
 	table_loai_go,
 	table_quoc_gia,
@@ -39,6 +40,7 @@ export enum QUERY_KEY {
 	chi_tiet_khach_hang,
 	chi_tiet_gia_tien_hang,
 	chi_tiet_doi_tac,
+	chi_tiet_nhan_vien,
 
 	thong_ke_tong_hang_nhap,
 }
