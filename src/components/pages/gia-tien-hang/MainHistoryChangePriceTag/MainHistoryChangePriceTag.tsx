@@ -13,6 +13,7 @@ import {
 	CONFIG_STATUS,
 	CONFIG_TYPE_FIND,
 	QUERY_KEY,
+	REGENCY_CODE,
 	REGENCY_NAME,
 	TYPE_PRICE_FUTURE,
 	TYPE_PRODUCT,
@@ -31,6 +32,7 @@ import Link from 'next/link';
 import {convertCoin} from '~/common/funcs/convertCoin';
 import TagStatusSpecCustomer from '../MainPriceTagCurrent/TagStatusSpecCustomer';
 import DatePickerFilter from '~/components/common/DatePickerFilter';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 
 function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 	const {_page, _pageSize, _keyword, _userOwnerCompanyUuid, _parentUserUuid, _productTypeUuid, _userOwnerUuid, _transportType, _status} =
@@ -242,29 +244,37 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 							]}
 						/>
 					</div>
-					<div className={styles.filter}>
-						<FilterCustom
-							isSearch
-							name='Quản lý nhập hàng'
-							query='_userOwnerCompanyUuid'
-							listFilter={listUserPurchasing?.data?.map((v: any) => ({
-								id: v?.uuid,
-								name: v?.fullName,
-							}))}
-						/>
-					</div>
+					<CheckRegencyCode
+						isPage={false}
+						regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}
+					>
+						<>
+							<div className={styles.filter}>
+								<FilterCustom
+									isSearch
+									name='Quản lý nhập hàng'
+									query='_userOwnerCompanyUuid'
+									listFilter={listUserPurchasing?.data?.map((v: any) => ({
+										id: v?.uuid,
+										name: v?.fullName,
+									}))}
+								/>
+							</div>
 
-					<div className={styles.filter}>
-						<FilterCustom
-							isSearch
-							name='Nhân viên thị trường'
-							query='_userOwnerUuid'
-							listFilter={listUserMarket?.data?.map((v: any) => ({
-								id: v?.uuid,
-								name: v?.fullName,
-							}))}
-						/>
-					</div>
+							<div className={styles.filter}>
+								<FilterCustom
+									isSearch
+									name='Nhân viên thị trường'
+									query='_userOwnerUuid'
+									listFilter={listUserMarket?.data?.map((v: any) => ({
+										id: v?.uuid,
+										name: v?.fullName,
+									}))}
+								/>
+							</div>
+						</>
+					</CheckRegencyCode>
+
 					<div className={styles.filter}>
 						{/* <DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.TODAY} /> */}
 						<DatePickerFilter

@@ -263,7 +263,7 @@ function MainPageWorkshop({}: PropsMainPageWorkshop) {
 					</div>
 				</div>
 
-				<div className={styles.btn}>
+				{/* <div className={styles.btn}>
 					<Button
 						href={PATH.ThemMoiXuong}
 						p_8_16
@@ -272,7 +272,7 @@ function MainPageWorkshop({}: PropsMainPageWorkshop) {
 					>
 						Thêm NCC
 					</Button>
-				</div>
+				</div> */}
 			</div>
 
 			<div className={styles.table}>
@@ -322,44 +322,44 @@ function MainPageWorkshop({}: PropsMainPageWorkshop) {
 								title: 'Trạng thái',
 								render: (data: any) => <TagStatus status={data?.status} />,
 							},
-							{
-								title: 'Tác vụ',
-								fixedRight: true,
-								render: (data: any) => (
-									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-										<IconCustom
-											edit
-											icon={<LuPencil fontSize={20} fontWeight={600} />}
-											tooltip='Chỉnh sửa'
-											color='#777E90'
-											href={`${PATH.ChinhSuaXuong}?_customerUuid=${data?.uuid}`}
-										/>
+							// {
+							// 	title: 'Tác vụ',
+							// 	fixedRight: true,
+							// 	render: (data: any) => (
+							// 		<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+							// 			<IconCustom
+							// 				edit
+							// 				icon={<LuPencil fontSize={20} fontWeight={600} />}
+							// 				tooltip='Chỉnh sửa'
+							// 				color='#777E90'
+							// 				href={`${PATH.ChinhSuaXuong}?_customerUuid=${data?.uuid}`}
+							// 			/>
 
-										{/* <IconCustom
-											lock
-											icon={data?.status == STATUS_CUSTOMER.HOP_TAC ? <Lock1 size={20} /> : <Unlock size={20} />}
-											tooltip={data?.status == STATUS_CUSTOMER.HOP_TAC ? '' : ''}
-											color='#777E90'
-											onClick={() => setDataStatusCustomer(data)}
-										/> */}
-										<IconCustom
-											lock
-											icon={
-												data?.status == STATUS_CUSTOMER.HOP_TAC ? (
-													<HiOutlineLockClosed size='22' />
-												) : (
-													<HiOutlineLockOpen size='22' />
-												)
-											}
-											tooltip={data.status == STATUS_CUSTOMER.HOP_TAC ? 'Khóa NCC' : 'Mở khóa NCC'}
-											color='#777E90'
-											onClick={() => {
-												setDataStatusCustomer(data);
-											}}
-										/>
-									</div>
-								),
-							},
+							// 			{/* <IconCustom
+							// 				lock
+							// 				icon={data?.status == STATUS_CUSTOMER.HOP_TAC ? <Lock1 size={20} /> : <Unlock size={20} />}
+							// 				tooltip={data?.status == STATUS_CUSTOMER.HOP_TAC ? '' : ''}
+							// 				color='#777E90'
+							// 				onClick={() => setDataStatusCustomer(data)}
+							// 			/> */}
+							// 			<IconCustom
+							// 				lock
+							// 				icon={
+							// 					data?.status == STATUS_CUSTOMER.HOP_TAC ? (
+							// 						<HiOutlineLockClosed size='22' />
+							// 					) : (
+							// 						<HiOutlineLockOpen size='22' />
+							// 					)
+							// 				}
+							// 				tooltip={data.status == STATUS_CUSTOMER.HOP_TAC ? 'Khóa NCC' : 'Mở khóa NCC'}
+							// 				color='#777E90'
+							// 				onClick={() => {
+							// 					setDataStatusCustomer(data);
+							// 				}}
+							// 			/>
+							// 		</div>
+							// 	),
+							// },
 						]}
 					/>
 				</DataWrapper>
