@@ -113,8 +113,8 @@ const priceTagServices = {
 			status: 0 | 1;
 			state: 0 | 1;
 			pricetagAfterUuid: string;
-			timeStart: string;
-			timeEnd: string;
+			timeStart: string | null;
+			timeEnd: string | null;
 		},
 		tokenAxios?: any
 	) => {

@@ -25,6 +25,7 @@ import DatePicker from '~/components/common/DatePicker';
 import {PiSealWarningFill} from 'react-icons/pi';
 import Moment from 'react-moment';
 import moment from 'moment';
+import {timeSubmit} from '~/common/funcs/optionConvert';
 
 function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 	const queryClient = useQueryClient();
@@ -112,8 +113,8 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 					state: form.state,
 					status: CONFIG_STATUS.HOAT_DONG,
 					pricetagAfterUuid: priceTagFuture.id === '' ? String(priceTagFuture.name) : priceTagFuture.id,
-					timeStart: moment(form.timeStart).startOf('day').toISOString(),
-					timeEnd: moment(form.timeEnd).endOf('day').toISOString(),
+					timeStart: form.timeStart ? timeSubmit(form.timeStart) : null,
+					timeEnd: form.timeEnd ? timeSubmit(form.timeEnd, true) : null,
 				}),
 			}),
 		onSuccess(data) {
