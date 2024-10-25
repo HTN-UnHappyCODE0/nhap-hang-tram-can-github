@@ -146,7 +146,7 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 			const timeEnd = new Date(form.timeEnd);
 
 			if (timeEnd < new Date()) {
-				return toastWarn({msg: 'Ngày kết thúc không được nhỏ hơn ngày hiện tại!'});
+				return toastWarn({msg: 'Ngày kết thúc phải lớn hơn ngày hiện tại!'});
 			}
 
 			if (timeStart > timeEnd) {
