@@ -100,15 +100,15 @@
 	&.col_6 {
 		--columns: 6;
 		@media (max-width: 1440px) {
-			--columns: 4;
+			--columns: 6;
 		}
 
 		@media (max-width: 1200px) {
-			--columns: 3;
+			--columns: 4;
 		}
 
 		@media (max-width: 764px) {
-			--columns: 2;
+			--columns: 3;
 			--gap: 12px;
 		}
 	}

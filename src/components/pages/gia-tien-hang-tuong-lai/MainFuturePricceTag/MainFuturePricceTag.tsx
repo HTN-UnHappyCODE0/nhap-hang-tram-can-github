@@ -37,6 +37,7 @@ import {HiOutlineLockClosed, HiOutlineLockOpen} from 'react-icons/hi';
 import Dialog from '~/components/common/Dialog';
 import {CloseCircle} from 'iconsax-react';
 import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import Loading from '~/components/common/Loading';
 
 function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 	const router = useRouter();
@@ -220,6 +221,7 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 
 	return (
 		<div className={styles.container}>
+			<Loading loading={funcChangeFuture.isLoading} />
 			<div className={styles.header}>
 				<div className={styles.main_search}>
 					<div className={styles.search}>

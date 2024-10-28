@@ -31,7 +31,7 @@ function ItemNoti({}: any) {
 	return (
 		<div className={styles.item}>
 			<p className={styles.text}>
-				Quản lý kho Nguyễn Văn Cường vừa gửi danh sách Phiếu đã KCS .Quản lý kho Nguyễn Văn Cường vừa gửi danh sách Phiếu đã KCS .
+				Quản lý kho Nguyễn Văn Cường vừa gửi danh sách Phiếu Phiếu đã KCS .Quản lý kho Nguyễn Văn Cường vừa gửi danh sách Phiếu Phiếu đã KCS .
 			</p>
 			<p className={styles.time}>
 				<Moment fromNow date={'Wed May 15 2024 11:28:03 GMT+0700 (Indochina Time)'} locale='vi' />

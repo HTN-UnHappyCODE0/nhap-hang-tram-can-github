@@ -3,13 +3,18 @@ import WrapperContainer from '../WrapperContainer';
 import {PropsLayoutPages} from './interfaces';
 
 import styles from './LayoutPages.module.scss';
+import FlexLayout from '../FlexLayout';
+import FullColumnFlex from '../FlexLayout/components/FullColumnFlex';
 
 function LayoutPages({children, listPages}: PropsLayoutPages) {
 	return (
-		<WrapperContainer>
-			<TabNavPage listPages={listPages} />
-
-			<div className={styles.main}>{children}</div>
+		<WrapperContainer bg={true}>
+			<FlexLayout isPage={true}>
+				<TabNavPage listPages={listPages} />
+				<FullColumnFlex>
+					<div className={styles.main}>{children}</div>
+				</FullColumnFlex>
+			</FlexLayout>
 		</WrapperContainer>
 	);
 }
