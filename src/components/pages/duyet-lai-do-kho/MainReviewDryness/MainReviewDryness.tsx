@@ -53,7 +53,8 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 	const [dataSpec, setDataSpec] = useState<any | null>(null);
 	const [uuidDescription, setUuidDescription] = useState<string>('');
 	const [total, setTotal] = useState<number>(0);
-	const [listSelectBill, setListSelectBill] = useState<any[]>([]);
+	const [listSelectBillRemove, setListSelectBillRemove] = useState<any[]>([]);
+	const [listSelectBillConfirm, setListSelectBillConfirm] = useState<any[]>([]);
 	const [listFixDryness, setListFixDryness] = useState<any[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [uuidConfirm, setUuidConfirm] = useState<any[]>([]);
@@ -230,10 +231,26 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 								danger
 								p_4_12
 								onClick={() => {
-									setListSelectBill(listFixDryness?.filter((v) => v.isChecked !== false)?.map((x: any) => x.uuid));
+									setListSelectBillRemove(listFixDryness?.filter((v) => v.isChecked !== false)?.map((x: any) => x.uuid));
 								}}
 							>
-								Chỉnh sửa độ khô
+								Từ chối duyệt
+							</Button>
+						</div>
+					)}
+					{listFixDryness?.some((x) => x.isChecked !== false) && (
+						<div style={{height: 40}}>
+							<Button
+								className={styles.btn}
+								rounded_2
+								maxHeight
+								green
+								p_4_12
+								onClick={() => {
+									setListSelectBillConfirm(listFixDryness?.filter((v) => v.isChecked !== false)?.map((x: any) => x.uuid));
+								}}
+							>
+								Xác nhận duyệt
 							</Button>
 						</div>
 					)}
@@ -461,7 +478,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 													icon={<TickCircle size={22} fontWeight={600} />}
 													tooltip='Xác nhận'
 													color='#2CAE39'
-													onClick={() => setListSelectBill([data])}
+													onClick={() => setListSelectBillConfirm([data.uuid])}
 												/>
 
 												<IconCustom
@@ -469,7 +486,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 													icon={<CloseCircle fontSize={20} fontWeight={600} />}
 													tooltip='Từ chối'
 													color='#D95656'
-													onClick={() => setListSelectBill([data])}
+													onClick={() => setListSelectBillRemove([data.uuid])}
 												/>
 											</div>
 										)}
@@ -499,28 +516,28 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 				onSubmit={funcConfirm.mutate}
 			/> */}
 			<Popup
-				open={listSelectBill.length > 0}
+				open={listSelectBillConfirm.length > 0}
 				onClose={() => {
-					setListSelectBill([]);
+					setListSelectBillConfirm([]);
 				}}
 			>
 				<PopupConfirmDryness
-					dataBillChangeDryness={listSelectBill}
+					dataBillChangeDryness={listSelectBillConfirm}
 					onClose={() => {
-						setListSelectBill([]);
+						setListSelectBillConfirm([]);
 					}}
 				/>
 			</Popup>
 			<Popup
-				open={listSelectBill.length > 0}
+				open={listSelectBillRemove.length > 0}
 				onClose={() => {
-					setListSelectBill([]);
+					setListSelectBillRemove([]);
 				}}
 			>
 				<PopupRemoveDryness
-					dataBillChangeDryness={listSelectBill}
+					dataBillChangeDryness={listSelectBillRemove}
 					onClose={() => {
-						setListSelectBill([]);
+						setListSelectBillRemove([]);
 					}}
 				/>
 			</Popup>
