@@ -50,6 +50,9 @@ export enum PATH {
 	NhaCungCap = '/nha-cung-cap',
 	ThemMoiNhaCungCap = '/nha-cung-cap/them-moi',
 	ChinhSuaNhaCungCap = '/nha-cung-cap/chinh-sua',
+
+	// Duyệt lại đồ khô
+	DuyetLaiDoKho = '/duyet-lai-do-kho',
 }
 
 export const Menu: {
@@ -93,6 +96,20 @@ export const Menu: {
 					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
 				],
 			},
+
+			{
+				title: 'Duyệt độ khô',
+				icon: icons.duyetdokho,
+				path: PATH.DuyetLaiDoKho,
+				pathActive: PATH.DuyetLaiDoKho,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+
 			{
 				title: 'Giá tiền hàng',
 				icon: icons.giatienhang,
