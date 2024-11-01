@@ -21,6 +21,7 @@ export enum QUERY_KEY {
 	dropdown_quan_ly_nhap_hang,
 	dropdown_gia_tien_hang_tuong_lai,
 	dropdown_nguoi_quan_ly_nhan_vien,
+	dropdown_loai_hang,
 
 	table_loai_go,
 	table_quoc_gia,
@@ -33,6 +34,7 @@ export enum QUERY_KEY {
 	table_cong_ty,
 	table_gia_tien_hang_tuong_lai,
 	table_gia_tien_lich_su,
+	table_do_kho_doi_duyet,
 
 	chi_tiet_quy_cach,
 	chi_tiet_gia_tien_chinh_sua,
@@ -271,4 +273,10 @@ export enum TYPE_PRICE_FUTURE {
 	CHUA_AP_DUNG,
 	DANG_AP_DUNG,
 	DA_KET_THUC,
+}
+
+export enum STATUS_CONFIRM {
+	DA_HUY,
+	DANG_DOI,
+	DA_CHOT,
 }
