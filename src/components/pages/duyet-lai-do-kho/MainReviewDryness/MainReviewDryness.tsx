@@ -375,13 +375,14 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 								render: (data: IReviewDryness) => <>{convertWeight(data?.weightMt)}</>,
 							},
 							{
-								title: 'Người thay đổi',
-								render: (data: IReviewDryness) => <>{data?.accountUu?.username || '---'}</>,
+								title: 'Tổng lượng quy khô cũ (Tấn)',
+								render: (data: IReviewDryness) => <>{convertWeight(data?.weightBdmtOld)}</>,
 							},
 							{
-								title: 'Người duyệt',
-								render: (data: IReviewDryness) => <>{data?.reporterUu?.username || '---'}</>,
+								title: 'Tổng lượng quy khô mới (Tấn)',
+								render: (data: IReviewDryness) => <>{convertWeight(data?.weightBdmtNew)}</>,
 							},
+
 							// {
 							// 	title: 'Quy cách',
 							// 	render: (data: IReviewDryness) => <p>{data?.specificationsUu?.name || '---'}</p>,
@@ -399,12 +400,20 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							// 	render: (data: IReviewDryness) => <Moment date={data?.updatedTime} format='HH:mm, DD/MM/YYYY' />,
 							// },
 							{
-								title: 'Giá tiền cũ',
+								title: 'Thành tiền cũ',
 								render: (data: IReviewDryness) => <p>{convertCoin(data?.moneyOld) || 0}</p>,
 							},
 							{
-								title: 'Giá tiền mới',
+								title: 'Thành tiền mới',
 								render: (data: IReviewDryness) => <p>{convertCoin(data?.moneyNew) || 0}</p>,
+							},
+							{
+								title: 'Người thay đổi',
+								render: (data: IReviewDryness) => <>{data?.accountUu?.username || '---'}</>,
+							},
+							{
+								title: 'Người duyệt',
+								render: (data: IReviewDryness) => <>{data?.reporterUu?.username || '---'}</>,
 							},
 							{
 								title: 'Trạng thái',
