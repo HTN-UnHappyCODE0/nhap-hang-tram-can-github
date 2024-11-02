@@ -389,11 +389,11 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							// },
 							{
 								title: 'Độ khô cũ',
-								render: (data: IReviewDryness) => <p className={styles.dryness}>{formatDrynessAvg(data?.drynessOld)} %</p>,
+								render: (data: IReviewDryness) => <p className={styles.dryness}>{data?.drynessOld?.toFixed(2)} %</p>,
 							},
 							{
 								title: 'Độ khô mới',
-								render: (data: IReviewDryness) => <p className={styles.dryness}>{formatDrynessAvg(data?.drynessNew)} %</p>,
+								render: (data: IReviewDryness) => <p className={styles.dryness}>{data?.drynessNew?.toFixed(2)} %</p>,
 							},
 							// {
 							// 	title: 'Thời gian gửi',
