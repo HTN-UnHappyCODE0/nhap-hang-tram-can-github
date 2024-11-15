@@ -152,6 +152,7 @@ const batchBillServices = {
 			storageUuid: string;
 			customerUuid: string;
 			warehouseUuid: string;
+			UserOwnerUuid: string;
 		},
 		tokenAxios?: any
 	) => {

@@ -93,7 +93,7 @@ function MainPagePartner({}: PropsMainPagePartner) {
 			httpRequest({
 				isList: true,
 				http: partnerServices.listPartner({
-					pageSize: Number(_pageSize) || 50,
+					pageSize: Number(_pageSize) || 200,
 					page: Number(_page) || 1,
 					keyword: (_keyword as string) || '',
 					status: !!_status ? Number(_status) : null,
@@ -299,7 +299,7 @@ function MainPagePartner({}: PropsMainPagePartner) {
 				<Pagination
 					currentPage={Number(_page) || 1}
 					total={listPartner?.data?.pagination?.totalCount}
-					pageSize={Number(_pageSize) || 50}
+					pageSize={Number(_pageSize) || 200}
 					dependencies={[_pageSize, _keyword, _status]}
 				/>
 			</div>

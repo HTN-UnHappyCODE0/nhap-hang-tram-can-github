@@ -117,7 +117,7 @@ function MainPageWorkshop({}: PropsMainPageWorkshop) {
 					isList: true,
 					http: customerServices.listCustomer({
 						page: Number(_page) || 1,
-						pageSize: Number(_pageSize) || 50,
+						pageSize: Number(_pageSize) || 200,
 						keyword: (_keyword as string) || '',
 						specUuid: '',
 						provinceId: '',
@@ -366,7 +366,7 @@ function MainPageWorkshop({}: PropsMainPageWorkshop) {
 				<Pagination
 					currentPage={Number(_page) || 1}
 					total={listCustomer?.data?.pagination?.totalCount}
-					pageSize={Number(_pageSize) || 50}
+					pageSize={Number(_pageSize) || 200}
 					dependencies={[_pageSize, _status, _keyword, _partnerUuid]}
 				/>
 				<Dialog

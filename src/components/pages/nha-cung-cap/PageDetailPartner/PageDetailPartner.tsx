@@ -70,7 +70,7 @@ function PageDetailPartner({}: PropsPageDetailPartner) {
 				isList: true,
 				http: customerServices.listCustomer({
 					page: Number(_page) || 1,
-					pageSize: Number(_pageSize) || 50,
+					pageSize: Number(_pageSize) || 200,
 					keyword: '',
 					specUuid: '',
 					userUuid: '',
@@ -395,7 +395,7 @@ function PageDetailPartner({}: PropsPageDetailPartner) {
 					<Pagination
 						currentPage={Number(_page) || 1}
 						total={listCustomer?.data?.pagination?.totalCount}
-						pageSize={Number(_pageSize) || 50}
+						pageSize={Number(_pageSize) || 200}
 						dependencies={[_pageSize, _id]}
 					/>
 				</div>
