@@ -39,6 +39,7 @@ import Loading from '~/components/common/Loading';
 import Select, {Option} from '~/components/common/Select';
 import {IoMdSearch} from 'react-icons/io';
 import GridColumn from '~/components/layouts/GridColumn';
+import Moment from 'react-moment';
 
 function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 	const router = useRouter();
@@ -155,7 +156,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 				isList: true,
 				http: batchBillServices.getListBill({
 					page: Number(_page) || 1,
-					pageSize: Number(_pageSize) || 50,
+					pageSize: Number(_pageSize) || 200,
 					keyword: (_keyword as string) || '',
 					isPaging: CONFIG_PAGING.IS_PAGING,
 					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
@@ -483,6 +484,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											title: 'Quy cách',
 											render: (data: IFormCreatePriceTagUpdate) => <>{data?.specificationsUu?.name || '---'}</>,
 										},
+
 										{
 											title: 'Vận chuyển',
 											render: (data: IFormCreatePriceTagUpdate) => (
@@ -504,12 +506,17 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											title: 'Tổng giá tiền hàng (VND)',
 											render: (data: IFormCreatePriceTagUpdate) => <>{convertCoin(data?.moneyTotal)}</>,
 										},
+										{
+											title: 'Ngày nhập hàng',
+											render: (data: IFormCreatePriceTagUpdate) =>
+												data?.timeEnd ? <Moment date={data?.timeEnd} format='DD/MM/YYYY' /> : '---',
+										},
 									]}
 								/>
 							</DataWrapper>
 							<Pagination
 								currentPage={Number(_page) || 1}
-								pageSize={Number(_pageSize) || 50}
+								pageSize={Number(_pageSize) || 200}
 								total={getListBatchBill?.data?.pagination?.totalCount}
 								dependencies={[_pageSize, _keyword, _dateFrom, _dateTo]}
 							/>
@@ -692,7 +699,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 							</DataWrapper>
 							<Pagination
 								currentPage={Number(_page) || 1}
-								pageSize={Number(_pageSize) || 50}
+								pageSize={Number(_pageSize) || 200}
 								total={1}
 								dependencies={[
 									_pageSize,

@@ -31,7 +31,7 @@ function MainHistoryPriceTag({}: PropsMainHistoryPriceTag) {
 					isList: true,
 					http: priceTagServices.listPriceTagHistory({
 						page: Number(_page) || 1,
-						pageSize: Number(_pageSize) || 50,
+						pageSize: Number(_pageSize) || 200,
 						keyword: '',
 						isPaging: CONFIG_PAGING.IS_PAGING,
 						isDescending: CONFIG_DESCENDING.NO_DESCENDING,
@@ -114,7 +114,7 @@ function MainHistoryPriceTag({}: PropsMainHistoryPriceTag) {
 				<Pagination
 					currentPage={Number(_page) || 1}
 					total={historyPriceTag?.data?.pagination?.totalCount}
-					pageSize={Number(_pageSize) || 50}
+					pageSize={Number(_pageSize) || 200}
 					dependencies={[_pageSize, _customerUuid, _specUuid, _productTypeUuid, _transportType]}
 				/>
 			</div>

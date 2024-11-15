@@ -95,7 +95,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 					isList: true,
 					http: priceTagServices.getListUpdatePriceTag({
 						page: Number(_page) || 1,
-						pageSize: Number(_pageSize) || 50,
+						pageSize: Number(_pageSize) || 200,
 						status: null,
 						keyword: (_keyword as string) || '',
 						isPaging: CONFIG_PAGING.IS_PAGING,
@@ -273,7 +273,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 				<Pagination
 					currentPage={Number(_page) || 1}
 					total={listUpdatePriceTag?.data?.pagination?.totalCount}
-					pageSize={Number(_pageSize) || 50}
+					pageSize={Number(_pageSize) || 200}
 					dependencies={[_pageSize, _keyword, _specificationUuid, _productTypeUuid, _transportType, _dateFrom, _dateTo]}
 				/>
 			</div>

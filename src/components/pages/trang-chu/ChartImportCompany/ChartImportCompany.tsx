@@ -13,6 +13,7 @@ import {
 	CONFIG_STATUS,
 	CONFIG_TYPE_FIND,
 	QUERY_KEY,
+	REGENCY_NAME,
 	STATUS_CUSTOMER,
 	TYPE_CUSTOMER,
 	TYPE_DATE,
@@ -25,10 +26,13 @@ import moment from 'moment';
 import {convertWeight, timeSubmit} from '~/common/funcs/optionConvert';
 import customerServices from '~/services/customerServices';
 import storageServices from '~/services/storageServices';
+import regencyServices from '~/services/regencyServices';
+import userServices from '~/services/userServices';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
 	const [customerUuid, setCustomerUuid] = useState<string>('');
+	const [userUuid, setUserUuid] = useState<string>('');
 	const [storageUuid, setStorageUuid] = useState<string>('');
 	const [typeDate, setTypeDate] = useState<number | null>(TYPE_DATE.LAST_7_DAYS);
 	const [date, setDate] = useState<{
@@ -97,7 +101,51 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		},
 	});
 
-	useQuery([QUERY_KEY.thong_ke_tong_hang_nhap, customerUuid, storageUuid, isShowBDMT, date], {
+	const listRegency = useQuery([QUERY_KEY.dropdown_chuc_vu], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: regencyServices.listRegency({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
+	const listUser = useQuery([QUERY_KEY.dropdown_nguoi_quan_ly], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: userServices.listUser({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+					provinceIDOwer: '',
+					regencyUuid: listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Quản lý nhập hàng'])
+						? listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Quản lý nhập hàng'])?.uuid
+						: null,
+					regencyUuidExclude: '',
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+		enabled: listRegency.isSuccess,
+	});
+
+	useQuery([QUERY_KEY.thong_ke_tong_hang_nhap, customerUuid, storageUuid, isShowBDMT, date, userUuid], {
 		queryFn: () =>
 			httpRequest({
 				isData: true,
@@ -106,6 +154,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					customerUuid: customerUuid,
 					isShowBDMT: Number(isShowBDMT),
 					storageUuid: storageUuid,
+					UserOwnerUuid: userUuid,
 					warehouseUuid: '',
 					companyUuid: '',
 					typeFindDay: 0,
@@ -210,6 +259,15 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						placeholder='Tất cả bãi'
 					/>
 					<SelectFilterDate isOptionDateAll={true} date={date} setDate={setDate} typeDate={typeDate} setTypeDate={setTypeDate} />
+					<SelectFilterOption
+						uuid={userUuid}
+						setUuid={setUserUuid}
+						listData={listUser?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.fullName,
+						}))}
+						placeholder='Tất cả người quản lý mua hàng'
+					/>
 				</div>
 			</div>
 			<div className={styles.head_data}>
