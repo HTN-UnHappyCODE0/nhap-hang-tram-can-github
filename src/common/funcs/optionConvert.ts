@@ -125,3 +125,7 @@ export function formatDrynessAvg(drynessAvg: number | null) {
 
 	return roundedNum.toFixed(2).replace('.', ',');
 }
+
+export function generateLinearGradient(colors: string) {
+	return `linear-gradient(180deg, ${colors})`;
+}
