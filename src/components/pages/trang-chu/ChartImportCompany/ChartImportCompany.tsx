@@ -262,7 +262,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						}))}
 						placeholder='Tất cả bãi'
 					/>
-					<SelectFilterDate isOptionDateAll={true} date={date} setDate={setDate} typeDate={typeDate} setTypeDate={setTypeDate} />
+					<SelectFilterDate isOptionDateAll={false} date={date} setDate={setDate} typeDate={typeDate} setTypeDate={setTypeDate} />
 					<SelectFilterOption
 						uuid={userUuid}
 						setUuid={setUserUuid}

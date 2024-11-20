@@ -219,7 +219,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 						/>
 					</div>
 
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
 							name='Trạng thái'
@@ -243,7 +243,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 								},
 							]}
 						/>
-					</div>
+					</div> */}
 					<CheckRegencyCode
 						isPage={false}
 						regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}
