@@ -27,7 +27,7 @@ function PopupConfirmDryness({dataBillChangeDryness, onClose}: PropsPopupConfirm
 			httpRequest({
 				showMessageFailed: true,
 				showMessageSuccess: true,
-				msgSuccess: 'Xác nhận duyệt thay đổi độ khô thành công !',
+				msgSuccess: 'Xác nhận duyệt thay đổi độ khô thành công!',
 				http: fixDrynessServices.acceptFixDryness({
 					uuid: body.uuids,
 					description: body.description,
