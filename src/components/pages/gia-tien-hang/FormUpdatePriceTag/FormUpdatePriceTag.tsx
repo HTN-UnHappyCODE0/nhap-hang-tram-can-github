@@ -137,7 +137,7 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 		if (!!form.timeStart) {
 			const timeStart = new Date(form.timeStart);
 			if (timeStart < new Date()) {
-				return toastWarn({msg: 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!'});
+				return toastWarn({msg: 'Ngày bắt đầu phải lớn hơn ngày hiện tại!'});
 			}
 		}
 
