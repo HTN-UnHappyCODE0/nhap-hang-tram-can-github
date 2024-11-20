@@ -134,7 +134,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 					pageSize: Number(_pageSize) || 200,
 					keyword: (_keyword as string) || '',
 					isPaging: CONFIG_PAGING.IS_PAGING,
-					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					isDescending: CONFIG_DESCENDING.IS_DESCENDING,
 					typeFind: CONFIG_TYPE_FIND.TABLE,
 					status: !!_status ? Number(_status) : null,
 					billUuid: '',
