@@ -209,7 +209,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 							{
 								title: 'Nhà cung cấp',
 								render: (data: IPriceTagUpdate) => (
-									<Link href={`/gia-tien-hang-chinh-sua/${data?.uuid}`} className={styles.link}>
+									<Link href={`/xuong/${data?.customerUu?.uuid}`} className={styles.link}>
 										{data?.customerUu?.name || '---'}
 									</Link>
 								),
