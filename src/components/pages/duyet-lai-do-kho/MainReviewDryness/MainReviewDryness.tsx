@@ -323,9 +323,9 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 						}))}
 					/>
 
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.TODAY} />
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<div className={styles.table}>
@@ -347,9 +347,9 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 								title: 'Mã lô',
 								fixedLeft: true,
 								render: (data: IReviewDryness) => (
-									<Link href={`#`} className={styles.link}>
-										{data?.billUu?.code}
-									</Link>
+									// <Link href={`#`} className={styles.link}>
+									<p className={styles.link}>{data?.billUu?.code}</p>
+									// </Link>
 								),
 							},
 							// {
