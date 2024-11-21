@@ -219,10 +219,6 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		},
 	});
 
-	console.log('dataTotal', dataTotal);
-	console.log('dataChart', dataChart);
-	console.log('productTypes', productTypes);
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.head}>
