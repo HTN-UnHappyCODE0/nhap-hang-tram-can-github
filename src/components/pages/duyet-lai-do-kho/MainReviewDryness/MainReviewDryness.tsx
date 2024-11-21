@@ -313,7 +313,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							name: v?.name,
 						}))}
 					/> */}
-					<FilterCustom
+					{/* <FilterCustom
 						isSearch
 						name='Quy cách'
 						query='_specUuid'
@@ -321,7 +321,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							id: v?.uuid,
 							name: v?.name,
 						}))}
-					/>
+					/> */}
 
 					{/* <div className={styles.filter}>
 						<DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.TODAY} />
