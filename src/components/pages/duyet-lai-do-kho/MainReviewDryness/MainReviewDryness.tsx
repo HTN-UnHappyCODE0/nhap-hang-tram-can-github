@@ -356,7 +356,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							// 	title: 'Kiểu cân',
 							// 	render: (data: IReviewDryness) => (
 							// 		<>
-							// 			{/* {data?.isBatch == TYPE_BATCH.CAN_LO && 'Cân lô'}
+							// 			{/* {data?.isBatch == TYPE_BATCH.CAN_LO && 'Cân lô   '}
 							// 			{data?.isBatch == TYPE_BATCH.CAN_LE && 'Cân lẻ'} */}
 							// 		</>
 							// 	),
