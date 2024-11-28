@@ -13,6 +13,7 @@ import {
 	CONFIG_STATUS,
 	CONFIG_TYPE_FIND,
 	QUERY_KEY,
+	REGENCY_CODE,
 	REGENCY_NAME,
 	STATUS_CUSTOMER,
 	TYPE_CUSTOMER,
@@ -28,6 +29,8 @@ import customerServices from '~/services/customerServices';
 import storageServices from '~/services/storageServices';
 import regencyServices from '~/services/regencyServices';
 import userServices from '~/services/userServices';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import router from 'next/router';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
@@ -259,15 +262,20 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						placeholder='Tất cả bãi'
 					/>
 					<SelectFilterDate isOptionDateAll={false} date={date} setDate={setDate} typeDate={typeDate} setTypeDate={setTypeDate} />
-					<SelectFilterOption
-						uuid={userUuid}
-						setUuid={setUserUuid}
-						listData={listUser?.data?.map((v: any) => ({
-							uuid: v?.uuid,
-							name: v?.fullName,
-						}))}
-						placeholder='Tất cả người quản lý mua hàng'
-					/>
+					<CheckRegencyCode
+						isPage={false}
+						regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}
+					>
+						<SelectFilterOption
+							uuid={userUuid}
+							setUuid={setUserUuid}
+							listData={listUser?.data?.map((v: any) => ({
+								uuid: v?.uuid,
+								name: v?.fullName,
+							}))}
+							placeholder='Tất cả người quản lý mua hàng'
+						/>
+					</CheckRegencyCode>
 				</div>
 			</div>
 			<div className={styles.head_data}>

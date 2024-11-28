@@ -28,6 +28,7 @@ import FormUpdateProductType from '../FormUpdateProductType';
 import TippyHeadless from '@tippyjs/react/headless';
 import Tippy from '@tippyjs/react';
 import clsx from 'clsx';
+import FilterCustomMany from '~/components/common/FilterCustomMany';
 
 function MainProductType({}: PropsMainProductType) {
 	const router = useRouter();
@@ -88,6 +89,7 @@ function MainProductType({}: PropsMainProductType) {
 					<div className={styles.search}>
 						<Search keyName='_keyword' placeholder='Tìm kiếm theo mã và tên loại hàng' />
 					</div>
+
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
