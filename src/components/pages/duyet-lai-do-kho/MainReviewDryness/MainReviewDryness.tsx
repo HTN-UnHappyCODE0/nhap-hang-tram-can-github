@@ -356,7 +356,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 							// 	title: 'Kiểu cân',
 							// 	render: (data: IReviewDryness) => (
 							// 		<>
-							// 			{/* {data?.isBatch == TYPE_BATCH.CAN_LO && 'Cân lô'}
+							// 			{/* {data?.isBatch == TYPE_BATCH.CAN_LO && 'Cân lô   '}
 							// 			{data?.isBatch == TYPE_BATCH.CAN_LE && 'Cân lẻ'} */}
 							// 		</>
 							// 	),
@@ -379,7 +379,7 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 								render: (data: IReviewDryness) => <>{convertWeight(data?.weightBdmtOld)}</>,
 							},
 							{
-								title: 'Tổng lượng quy khô mới (Tấn)',
+								title: 'Tổng lượng quy khô mới (Tấn) ',
 								render: (data: IReviewDryness) => <>{convertWeight(data?.weightBdmtNew)}</>,
 							},
 
