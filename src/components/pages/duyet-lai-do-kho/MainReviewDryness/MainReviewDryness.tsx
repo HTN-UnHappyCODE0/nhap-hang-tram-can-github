@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {IReviewDryness, PropsMainReviewDryness} from './interfaces';
 import styles from './MainReviewDryness.module.scss';
@@ -216,6 +216,20 @@ function MainReviewDryness({}: PropsMainReviewDryness) {
 	// 		console.log({error});
 	// 	},
 	// });
+
+	useEffect(() => {
+		router.replace(
+			{
+				pathname: router.pathname,
+				query: {
+					...router.query,
+					_status: STATUS_CONFIRM.DANG_DOI,
+				},
+			},
+			undefined,
+			{shallow: true, scroll: false}
+		);
+	}, [_status]);
 
 	return (
 		<div className={styles.container}>
