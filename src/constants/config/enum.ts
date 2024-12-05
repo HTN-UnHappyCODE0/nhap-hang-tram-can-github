@@ -22,6 +22,8 @@ export enum QUERY_KEY {
 	dropdown_gia_tien_hang_tuong_lai,
 	dropdown_nguoi_quan_ly_nhan_vien,
 	dropdown_loai_hang,
+	dropdown_chat_luong,
+	dropdown_tram_can,
 
 	table_loai_go,
 	table_quoc_gia,
@@ -35,6 +37,13 @@ export enum QUERY_KEY {
 	table_gia_tien_hang_tuong_lai,
 	table_gia_tien_lich_su,
 	table_do_kho_doi_duyet,
+	danh_sach_tieu_chi_quy_cach,
+	table_kho_hang,
+	thong_ke_kho_hang,
+	table_kiem_ke_bai,
+	table_khach_hang_bai,
+	table_lich_su_bai,
+	table_bai,
 
 	chi_tiet_quy_cach,
 	chi_tiet_gia_tien_chinh_sua,
@@ -43,6 +52,9 @@ export enum QUERY_KEY {
 	chi_tiet_gia_tien_hang,
 	chi_tiet_doi_tac,
 	chi_tiet_nhan_vien,
+	chi_tiet_kho_hang,
+	chi_tiet_bai,
+	chi_tiet_lich_su_kiem_ke,
 
 	thong_ke_tong_hang_nhap,
 }
@@ -279,4 +291,9 @@ export enum STATUS_CONFIRM {
 	DA_HUY,
 	DANG_DOI,
 	DA_CHOT,
+}
+
+export enum TYPE_STORE {
+	ADMIN_KHO,
+	NHAP_HANG,
 }

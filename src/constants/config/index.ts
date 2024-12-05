@@ -53,6 +53,9 @@ export enum PATH {
 
 	// Duyệt lại đồ khô
 	DuyetLaiDoKho = '/duyet-lai-do-kho',
+
+	// Kho hàng
+	KhoHang = '/kho-hang',
 }
 
 export const Menu: {
@@ -72,6 +75,24 @@ export const Menu: {
 				title: 'Tổng quan',
 				icon: icons.tongQuan,
 				path: PATH.Home,
+				regencys: [
+					REGENCY_CODE.GIAM_DOC,
+					REGENCY_CODE.PHO_GIAM_DOC,
+					REGENCY_CODE.QUAN_LY_NHAP_HANG,
+					REGENCY_CODE.NHAN_VIEN_THI_TRUONG,
+				],
+			},
+		],
+	},
+
+	{
+		title: 'Kho hàng',
+		group: [
+			{
+				title: 'Kho hàng',
+				icon: icons.danhsachkho,
+				path: PATH.KhoHang,
+				pathActive: '/kho-hang',
 				regencys: [
 					REGENCY_CODE.GIAM_DOC,
 					REGENCY_CODE.PHO_GIAM_DOC,
