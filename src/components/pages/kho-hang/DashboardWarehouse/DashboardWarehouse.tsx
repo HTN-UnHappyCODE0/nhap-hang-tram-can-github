@@ -31,11 +31,11 @@ function DashboardWarehouse({isTotal, total, productTotal, qualityTotal, specTot
 					)}
 					<h4 className={styles.title}>{isTotal ? 'Tổng kho Cái Lân' : dataWarehouse?.name}</h4>
 				</div>
-				{!isTotal && (
+				{/* {!isTotal && (
 					<Link href={`/kho-hang/${dataWarehouse?.uuid}`} className={styles.link}>
 						Chi tiết kho hàng
 					</Link>
-				)}
+				)} */}
 			</div>
 			<div className={styles.main}>
 				<div className={styles.main_item}>
