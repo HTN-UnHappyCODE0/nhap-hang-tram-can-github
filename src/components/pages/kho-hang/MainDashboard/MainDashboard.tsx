@@ -7,8 +7,11 @@ import {useQuery} from '@tanstack/react-query';
 import {QUERY_KEY, TYPE_STORE} from '~/constants/config/enum';
 import {httpRequest} from '~/services';
 import warehouseServices from '~/services/warehouseServices';
+import {useRouter} from 'next/router';
 
 function MainDashboard({}: PropsMainDashboard) {
+	const router = useRouter();
+	const {_companyUuid} = router.query;
 	const {data: dataWarehouse} = useQuery([QUERY_KEY.thong_ke_kho_hang], {
 		queryFn: () =>
 			httpRequest({
