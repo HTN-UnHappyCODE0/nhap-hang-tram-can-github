@@ -1,13 +1,16 @@
 export interface PropsTable {
 	data: any;
 	column: {
-		title: any;
+		totalMoney?: number;
+		title: string | React.ReactNode;
 		render: any;
 		className?: string;
 		checkBox?: boolean;
 		textAlign?: string;
 		fixedLeft?: boolean;
 		fixedRight?: boolean;
+		selectRow?: boolean;
+		isTitle?: any;
 	}[];
 	onSetData?: (any: any) => void;
 	isChild?: boolean;
