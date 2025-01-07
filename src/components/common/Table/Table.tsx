@@ -64,66 +64,86 @@ function Table({data, column, onSetData, fixedHeader = false}: PropsTable) {
 		return data.length > 0 ? data.some((item: any) => item?.isChecked === false) : false;
 	}, [data]);
 
+	const [selectedRow, setSelectedRow] = useState<number | null>(null);
+
+	const handleRowClick = (index: number) => {
+		setSelectedRow(index);
+	};
+
 	return (
 		<div ref={myElementRef} className={clsx(styles.container, {[styles.fixedHeader]: fixedHeader})}>
 			<table>
 				<thead>
 					<tr>
-						{column.map((v: any, i: number) => (
-							<th
-								className={clsx({
-									[styles.checkBox]: v.checkBox,
-									[styles.textEnd]: v.textAlign == 'end',
-									[styles.textStart]: v.textAlign == 'start',
-									[styles.textCenter]: v.textAlign == 'center',
-									[styles.fixedLeft]: v.fixedLeft && isShowScroll,
-									[styles.fixedRight]: v.fixedRight && isShowScroll,
-								})}
-								key={i}
-							>
-								<div className={styles.title_check_box}>
-									{v.checkBox ? (
-										<input
-											className={clsx(styles.checkbox, styles.checkbox_head)}
-											onChange={handleCheckAll}
-											checked={!isCheckedAll || false}
-											type='checkbox'
-										/>
-									) : null}
-									{v.title}
-								</div>
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{data.map((v: any, i: number) => (
-						<tr key={i}>
-							{column.map((y: any, j: number) => (
-								<td
-									key={j}
+						{column.map((col: any, i: number) => {
+							const isTitle = typeof col.isTitle === 'function' ? col.isTitle(null, i) : col.isTitle;
+
+							return (
+								<th
 									className={clsx({
-										[styles.fixedLeft]: y.fixedLeft && isShowScroll,
-										[styles.fixedRight]: y.fixedRight && isShowScroll,
+										[styles.checkBox]: col.checkBox,
+										[styles.textEnd]: col.textAlign == 'end',
+										[styles.textStart]: col.textAlign == 'start',
+										[styles.textCenter]: col.textAlign == 'center',
+										[styles.fixedLeft]: col.fixedLeft && isShowScroll,
+										[styles.fixedRight]: col.fixedRight && isShowScroll,
 									})}
+									key={i}
 								>
-									<div
-										className={clsx(y.className, {
-											[styles.checkBox]: y.checkBox,
-										})}
-									>
-										{y.checkBox ? (
+									<div className={styles.title_check_box}>
+										{col.checkBox && !isTitle ? (
 											<input
-												className={styles.checkbox}
-												onChange={(e) => handleCheckRow(e, i)}
-												checked={v?.isChecked || false}
+												className={clsx(styles.checkbox, styles.checkbox_head)}
+												onChange={handleCheckAll}
+												checked={!isCheckedAll || false}
 												type='checkbox'
 											/>
 										) : null}
-										{y.render(v, i)}
+										{col.title}
 									</div>
-								</td>
-							))}
+								</th>
+							);
+						})}
+					</tr>
+				</thead>
+				<tbody>
+					{data.map((row: any, rowIndex: number) => (
+						<tr key={rowIndex}>
+							{column.map((col: any, colIndex: number) => {
+								const isTitle = typeof col.isTitle === 'function' ? col.isTitle(row, rowIndex) : col.isTitle;
+
+								return (
+									<td
+										key={colIndex}
+										onClick={!col.selectRow ? () => handleRowClick(rowIndex) : (e) => e.stopPropagation()}
+										className={clsx({
+											[styles.selectedRow]: selectedRow === rowIndex,
+											[styles.isTitleRow]: isTitle,
+											[styles.fixedLeft]: col.fixedLeft && isShowScroll,
+											[styles.fixedRight]: col.fixedRight && isShowScroll,
+											[styles.stickyHeader]: col.fixedLeft && isTitle,
+											[styles.stickyHeader1]: col.fixedRight && isTitle,
+										})}
+									>
+										<div
+											className={clsx(col.className, {
+												[styles.checkBox]: col.checkBox,
+											})}
+										>
+											{col.checkBox && !isTitle ? (
+												<input
+													className={styles.checkbox}
+													onClick={(e) => e.stopPropagation()}
+													onChange={(e) => handleCheckRow(e, rowIndex)}
+													checked={row?.isChecked || false}
+													type='checkbox'
+												/>
+											) : null}
+											{col.render(row, rowIndex)}
+										</div>
+									</td>
+								);
+							})}
 						</tr>
 					))}
 				</tbody>

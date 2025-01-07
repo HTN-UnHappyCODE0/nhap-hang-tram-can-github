@@ -463,12 +463,12 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 										{
 											title: 'STT',
 											checkBox: true,
-											render: (data: IFormCreatePriceTagUpdate, index: number) => <>{index + 1}</>,
+											render: (data: IFormCreatePriceTagUpdate, index: number) => <span>{index + 1}</span>,
 										},
 										{
 											title: 'Mã lô hàng',
 											fixedLeft: true,
-											render: (data: IFormCreatePriceTagUpdate) => <>{data?.code}</>,
+											render: (data: IFormCreatePriceTagUpdate) => <span>{data?.code}</span>,
 										},
 										{
 											title: 'Loại hàng',
