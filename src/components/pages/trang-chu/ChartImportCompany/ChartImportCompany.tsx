@@ -232,6 +232,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 
 			setDataChart(dataConvert);
 			setProductTypes(productTypes);
+
 			setDataTotal({
 				totalWeight: data?.totalWeight,
 				lstProductTotal: data?.lstProductTotal?.map((v: any) => ({

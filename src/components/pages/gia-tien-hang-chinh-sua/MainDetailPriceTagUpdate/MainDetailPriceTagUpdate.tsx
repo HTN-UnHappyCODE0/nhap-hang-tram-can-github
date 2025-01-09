@@ -79,7 +79,7 @@ function MainDetailPriceTagUpdate({}: PropsMainDetailPriceTagUpdate) {
 									: '---'
 							}
 						/>
-						<ItemDashboard text='Giá tiền hiện tại' color='#2D74FF' value={detailFixPricetag?.priceUu?.amount} unit='VND' />
+						<ItemDashboard text='Giá tiền hiện tại' color='#2D74FF' value={detailFixPricetag?.priceUu?.amount} unit='VNĐ' />
 					</GridColumn>
 				</div>
 			</div>
@@ -111,7 +111,7 @@ function MainDetailPriceTagUpdate({}: PropsMainDetailPriceTagUpdate) {
 										render: (data: IhistoryFixPriceBill) => <>{data?.billUu?.code}</>,
 									},
 									{
-										title: 'Giá ban đầu (VND)',
+										title: 'Giá ban đầu (VNĐ)',
 										render: (data: IhistoryFixPriceBill) => <>{convertCoin(data?.priceOldUu?.amount) || 0}</>,
 									},
 									{

@@ -58,6 +58,7 @@ export enum QUERY_KEY {
 
 	thong_ke_tong_hang_nhap,
 	thong_ke_bieu_do_duong_loai_hang,
+	thong_ke_bieu_do_gia_tien_theo_ngay,
 }
 
 export enum TYPE_DATE {

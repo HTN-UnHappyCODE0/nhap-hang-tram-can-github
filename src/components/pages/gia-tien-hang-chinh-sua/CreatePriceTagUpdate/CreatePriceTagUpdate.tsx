@@ -403,7 +403,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 								</span>
 							}
 							placeholder='Nhập giá tiền'
-							unit='VND'
+							unit='VNĐ'
 						/>
 						<DatePicker
 							icon={true}
@@ -493,11 +493,11 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											render: (data: IFormCreatePriceTagUpdate) => <>{convertWeight(data?.weightTotal)}</>,
 										},
 										{
-											title: 'Giá tiền (VND)',
+											title: 'Giá tiền (VNĐ)',
 											render: (data: IFormCreatePriceTagUpdate) => <>{convertCoin(data?.pricetagUu?.amount)}</>,
 										},
 										{
-											title: 'Tổng giá tiền hàng (VND)',
+											title: 'Tổng giá tiền hàng (VNĐ)',
 											render: (data: IFormCreatePriceTagUpdate) => <>{convertCoin(data?.moneyTotal)}</>,
 										},
 										{
@@ -533,7 +533,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 								</span>
 							}
 							placeholder='Nhập giá tiền'
-							unit='VND'
+							unit='VNĐ'
 						/>
 						<DatePicker
 							icon={true}
@@ -685,7 +685,7 @@ function CreatePriceTagUpdate({}: PropsCreatePriceTagUpdate) {
 											render: (data: any) => <>{convertWeight(data?.weightTotal)}</>,
 										},
 										{
-											title: 'Giá tiền (VND)',
+											title: 'Giá tiền (VNĐ)',
 											render: (data: any) => <>{convertCoin(data?.moneyTotal)}</>,
 										},
 									]}

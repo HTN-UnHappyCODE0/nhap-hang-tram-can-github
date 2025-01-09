@@ -188,23 +188,23 @@ function PageDetailPartner({}: PropsPageDetailPartner) {
 							color='#3772FF'
 							text='Công nợ tạm tính'
 							value={detailPartner?.debtDemo!}
-							unit='VND'
+							unit='VNĐ'
 						/>
 						<ItemDashboard
 							isLoading={isLoading}
 							color='#3772FF'
 							text='Công nợ chuẩn'
 							value={detailPartner?.debtReal!}
-							unit='VND'
+							unit='VNĐ'
 						/>
 						<ItemDashboard
 							isLoading={isLoading}
 							color='#3772FF'
 							text='Tổng công nợ'
 							value={detailPartner?.debtDemo! + detailPartner?.debtReal!}
-							unit='VND'
+							unit='VNĐ'
 						/>
-						<ItemDashboard isLoading={isLoading} color='#3772FF' text='Tổng tiền thuế' value={detailPartner?.tax} unit='VND' />
+						<ItemDashboard isLoading={isLoading} color='#3772FF' text='Tổng tiền thuế' value={detailPartner?.tax} unit='VNĐ' />
 					</GridColumn>
 				</div>
 
