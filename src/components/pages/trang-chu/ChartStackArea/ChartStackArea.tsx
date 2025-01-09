@@ -199,7 +199,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					>
 						<CartesianGrid strokeDasharray='3 3' />
 						<XAxis dataKey='name' scale='point' padding={{left: 40}} />
-						<YAxis />
+						<YAxis domain={[0, 'dataMax']} />
 						<Tooltip />
 						<defs>
 							<linearGradient id='colorUv' x1='0' y1='0' x2='0' y2='1'>
@@ -219,11 +219,9 @@ function ChartStackArea({}: PropsChartStackArea) {
 								<stop offset='100%' stopColor='#ffc658' stopOpacity={0.05} />
 							</linearGradient>
 						</defs>
-
 						<Area
 							type='linear'
 							dataKey='uv'
-							stackId='1'
 							stroke='#3CC3DF'
 							fill='url(#colorUv)'
 							dot={{
@@ -236,7 +234,6 @@ function ChartStackArea({}: PropsChartStackArea) {
 						<Area
 							type='linear'
 							dataKey='pv'
-							stackId='1'
 							stroke='#82ca9d'
 							fill='url(#colorPv)'
 							dot={{
@@ -249,7 +246,6 @@ function ChartStackArea({}: PropsChartStackArea) {
 						<Area
 							type='linear'
 							dataKey='amt'
-							stackId='1'
 							stroke='#ffc658'
 							fill='url(#colorAmt)'
 							dot={{
