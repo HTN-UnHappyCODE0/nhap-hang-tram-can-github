@@ -21,10 +21,12 @@ import {httpRequest} from '~/services';
 import customerServices from '~/services/customerServices';
 import userServices from '~/services/userServices';
 import regencyServices from '~/services/regencyServices';
+import priceTagServices from '~/services/priceTagServices';
 
 function ChartStackArea({}: PropsChartStackArea) {
 	const [customerUuid, setCustomerUuid] = useState<string>('');
 	const [userUuid, setUserUuid] = useState<string>('');
+
 	const data = [
 		{
 			name: 'Page A',
@@ -141,6 +143,82 @@ function ChartStackArea({}: PropsChartStackArea) {
 			return data;
 		},
 		enabled: listRegency.isSuccess,
+	});
+
+	useQuery([QUERY_KEY.thong_ke_bieu_do_duong_loai_hang], {
+		queryFn: () =>
+			httpRequest({
+				isData: true,
+				http: priceTagServices.dashBoardDailyPrice({
+					timeStart: '',
+					timeEnd: '',
+					userOwnerUuid: [],
+					partnerUuid: [],
+					customerUuid: [],
+					companyUuid: [],
+					transport_type: null,
+					productTypeUuid: '',
+				}),
+			}),
+		onSuccess(data) {
+			if (data) {
+				console.log(data);
+			}
+
+			// Convert data chart
+			// const dataConvert = data?.lstProductDay?.map((v: any) => {
+			// 	const date =
+			// 		data?.typeShow == TYPE_DATE_SHOW.HOUR
+			// 			? moment(v?.timeScale).format('HH:mm')
+			// 			: data?.typeShow == TYPE_DATE_SHOW.DAY
+			// 			? moment(v?.timeScale).format('DD/MM')
+			// 			: data?.typeShow == TYPE_DATE_SHOW.MONTH
+			// 			? moment(v?.timeScale).format('MM-YYYY')
+			// 			: moment(v?.timeScale).format('YYYY');
+
+			// 	const obj = v?.productDateWeightUu?.reduce((acc: any, item: any) => {
+			// 		acc[item.productTypeUu.name] = item.weightMT;
+
+			// 		return acc;
+			// 	}, {});
+
+			// 	return {
+			// 		name: date,
+			// 		...obj,
+			// 	};
+			// });
+
+			// // Convert bar chart
+			// const productColors = data?.lstProductDay
+			// 	?.flatMap((item: any) =>
+			// 		item.productDateWeightUu.map((product: any) => ({
+			// 			name: product.productTypeUu.name,
+			// 			color: product.productTypeUu.colorShow,
+			// 		}))
+			// 	)
+			// 	.reduce((acc: any, {name, color}: {name: string; color: string}) => {
+			// 		if (!acc[name]) {
+			// 			acc[name] = color;
+			// 		}
+			// 		return acc;
+			// 	}, {});
+
+			// const productTypes = Object.keys(productColors).map((key) => ({
+			// 	key,
+			// 	fill: productColors[key],
+			// }));
+
+			// setDataChart(dataConvert);
+			// setProductTypes(productTypes);
+			// setDataTotal({
+			// 	totalWeight: data?.totalWeight,
+			// 	lstProductTotal: data?.lstProductTotal?.map((v: any) => ({
+			// 		name: v?.productTypeUu?.name,
+			// 		colorShow: v?.productTypeUu?.colorShow,
+			// 		weightMT: v?.weightMT,
+			// 	})),
+			// });
+		},
 	});
 
 	return (

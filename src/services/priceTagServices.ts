@@ -255,13 +255,13 @@ const priceTagServices = {
 	},
 	dashBoardDailyPrice: (
 		data: {
-			timeStart: string | null;
-			timeEnd: string | null;
+			timeStart: string;
+			timeEnd: string;
 			userOwnerUuid: string[];
 			partnerUuid: string[];
 			customerUuid: string[];
 			companyUuid: string[];
-			transport_type: number;
+			transport_type: number | null;
 			productTypeUuid: string;
 		},
 		tokenAxios?: any
