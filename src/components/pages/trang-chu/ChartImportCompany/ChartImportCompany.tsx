@@ -31,6 +31,7 @@ import regencyServices from '~/services/regencyServices';
 import userServices from '~/services/userServices';
 import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 import router from 'next/router';
+import companyServices from '~/services/companyServices';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
@@ -38,6 +39,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 	const [userUuid, setUserUuid] = useState<string>('');
 	const [storageUuid, setStorageUuid] = useState<string>('');
 	const [typeDate, setTypeDate] = useState<number | null>(TYPE_DATE.LAST_7_DAYS);
+	const [uuidCompany, setUuidCompanyFilter] = useState<string>('');
 	const [date, setDate] = useState<{
 		from: Date | null;
 		to: Date | null;
@@ -123,6 +125,25 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		},
 	});
 
+	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: companyServices.listCompany({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
 	const listUser = useQuery([QUERY_KEY.dropdown_nguoi_quan_ly], {
 		queryFn: () =>
 			httpRequest({
@@ -148,7 +169,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		enabled: listRegency.isSuccess,
 	});
 
-	useQuery([QUERY_KEY.thong_ke_tong_hang_nhap, customerUuid, storageUuid, isShowBDMT, date, userUuid], {
+	useQuery([QUERY_KEY.thong_ke_tong_hang_nhap, customerUuid, storageUuid, isShowBDMT, date, userUuid, uuidCompany], {
 		queryFn: () =>
 			httpRequest({
 				isData: true,
@@ -159,7 +180,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					storageUuid: storageUuid,
 					UserOwnerUuid: userUuid,
 					warehouseUuid: '',
-					companyUuid: '',
+					companyUuid: uuidCompany,
 					typeFindDay: 0,
 					timeStart: timeSubmit(date?.from)!,
 					timeEnd: timeSubmit(date?.to, true)!,
@@ -276,6 +297,15 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 							placeholder='Tất cả người quản lý mua hàng'
 						/>
 					</CheckRegencyCode>
+					<SelectFilterOption
+						uuid={uuidCompany}
+						setUuid={setUuidCompanyFilter}
+						listData={listCompany?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả kv cảng xuất khẩu'
+					/>
 				</div>
 			</div>
 			<div className={styles.head_data}>

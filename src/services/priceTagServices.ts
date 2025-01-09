@@ -253,6 +253,23 @@ const priceTagServices = {
 			cancelToken: tokenAxios,
 		});
 	},
+	dashBoardDailyPrice: (
+		data: {
+			timeStart: string | null;
+			timeEnd: string | null;
+			userOwnerUuid: string[];
+			partnerUuid: string[];
+			customerUuid: string[];
+			companyUuid: string[];
+			transport_type: number;
+			productTypeUuid: string;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/PriceTag/dash-board-daily-price`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
 };
 
 export default priceTagServices;

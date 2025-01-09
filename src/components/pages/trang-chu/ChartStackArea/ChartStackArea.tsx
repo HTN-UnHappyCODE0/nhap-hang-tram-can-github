@@ -1,10 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {PropsChartStackArea} from './interfaces';
 import styles from './ChartStackArea.module.scss';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import SelectFilterOption from '../SelectFilterOption';
+import {useQuery} from '@tanstack/react-query';
+import {
+	CONFIG_DESCENDING,
+	CONFIG_PAGING,
+	CONFIG_STATUS,
+	CONFIG_TYPE_FIND,
+	QUERY_KEY,
+	REGENCY_CODE,
+	REGENCY_NAME,
+	STATUS_CUSTOMER,
+	TYPE_CUSTOMER,
+} from '~/constants/config/enum';
+import {httpRequest} from '~/services';
+import customerServices from '~/services/customerServices';
+import userServices from '~/services/userServices';
+import regencyServices from '~/services/regencyServices';
 
 function ChartStackArea({}: PropsChartStackArea) {
+	const [customerUuid, setCustomerUuid] = useState<string>('');
+	const [userUuid, setUserUuid] = useState<string>('');
 	const data = [
 		{
 			name: 'Page A',
@@ -55,10 +75,103 @@ function ChartStackArea({}: PropsChartStackArea) {
 			amt: 2100,
 		},
 	];
+
+	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: customerServices.listCustomer({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.TABLE,
+					partnerUUid: '',
+					userUuid: '',
+					status: STATUS_CUSTOMER.HOP_TAC,
+					typeCus: TYPE_CUSTOMER.NHA_CUNG_CAP,
+					provinceId: '',
+					specUuid: '',
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
+	const listRegency = useQuery([QUERY_KEY.dropdown_chuc_vu], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: regencyServices.listRegency({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+	const listUser = useQuery([QUERY_KEY.dropdown_nguoi_quan_ly], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: userServices.listUser({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+					provinceIDOwer: '',
+					regencyUuid: listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Quản lý nhập hàng'])
+						? listRegency?.data?.find((v: any) => v?.code == REGENCY_NAME['Quản lý nhập hàng'])?.uuid
+						: null,
+					regencyUuidExclude: '',
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+		enabled: listRegency.isSuccess,
+	});
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.head}>
 				<h3>Biểu đồ giá tiền nhập hàng (VND)</h3>
+				<div className={styles.filter}>
+					<SelectFilterOption
+						uuid={customerUuid}
+						setUuid={setCustomerUuid}
+						listData={listCustomer?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả nhà cung cấp'
+					/>
+					<CheckRegencyCode
+						isPage={false}
+						regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}
+					>
+						<SelectFilterOption
+							uuid={userUuid}
+							setUuid={setUserUuid}
+							listData={listUser?.data?.map((v: any) => ({
+								uuid: v?.uuid,
+								name: v?.fullName,
+							}))}
+							placeholder='Tất cả người quản lý mua hàng'
+						/>
+					</CheckRegencyCode>
+				</div>
 			</div>
 			<div className={styles.head_data}>
 				<p className={styles.data_total}>
