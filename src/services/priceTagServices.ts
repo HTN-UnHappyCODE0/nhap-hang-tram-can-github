@@ -257,10 +257,10 @@ const priceTagServices = {
 		data: {
 			timeStart: string;
 			timeEnd: string;
-			userOwnerUuid: string[];
-			partnerUuid: string[];
-			customerUuid: string[];
-			companyUuid: string[];
+			userOwnerUuid: string;
+			partnerUuid: string;
+			customerUuid: string;
+			companyUuid: string;
 			transport_type: number | null;
 			productTypeUuid: string;
 		},

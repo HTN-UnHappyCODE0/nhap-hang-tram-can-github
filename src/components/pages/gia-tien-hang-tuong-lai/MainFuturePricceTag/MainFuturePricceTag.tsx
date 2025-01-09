@@ -377,11 +377,11 @@ function MainFuturePricceTag({}: PropsMainFuturePricceTag) {
 								),
 							},
 							{
-								title: 'Giá tiền (VND)',
+								title: 'Giá tiền (VNĐ)',
 								render: (data: IPriceTagFuture) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
 							{
-								title: 'Giá tiền sau ngày kết thúc (VND)',
+								title: 'Giá tiền sau ngày kết thúc (VNĐ)',
 								render: (data: IPriceTagFuture) => <>{convertCoin(data?.pricetagAfterUu?.amount) || 0} </>,
 							},
 							// {

@@ -321,7 +321,7 @@ function MainHistoryChangePriceTag({}: PropsMainHistoryChangePriceTag) {
 								),
 							},
 							{
-								title: 'Giá tiền (VND)',
+								title: 'Giá tiền (VNĐ)',
 								render: (data: IPriceTagChangeHistory) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
 							{

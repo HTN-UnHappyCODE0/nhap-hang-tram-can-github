@@ -330,7 +330,7 @@ function PageDetailWorkshop({}: PropsPageDetailWorkshop) {
 									),
 								},
 								{
-									title: 'Giá tiền (VND)',
+									title: 'Giá tiền (VNĐ)',
 									render: (data: IlistCustomerSpec) => (
 										<p style={{fontWeight: '600', color: '#3772FF'}}>{convertCoin(data?.pricetagUu?.amount)}</p>
 									),

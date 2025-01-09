@@ -215,7 +215,7 @@ function MainPriceTagUpdate({}: PropsMainPriceTagUpdate) {
 								),
 							},
 							{
-								title: 'Giá tiền mới (VND)',
+								title: 'Giá tiền mới (VNĐ)',
 								render: (data: IPriceTagUpdate) => (
 									<span style={{color: 'var(--primary)'}}>{convertCoin(data?.priceUu?.amount) || 0}</span>
 								),
