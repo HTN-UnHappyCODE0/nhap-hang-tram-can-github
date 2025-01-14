@@ -263,6 +263,7 @@ const priceTagServices = {
 			companyUuid: string;
 			transport_type: number | null;
 			productTypeUuid: string;
+			provinceId: string;
 		},
 		tokenAxios?: any
 	) => {

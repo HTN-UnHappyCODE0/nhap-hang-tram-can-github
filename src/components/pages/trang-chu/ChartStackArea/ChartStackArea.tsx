@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {PropsChartStackArea} from './interfaces';
 import styles from './ChartStackArea.module.scss';
@@ -31,6 +31,8 @@ import companyServices from '~/services/companyServices';
 import moment from 'moment';
 import {convertCoin} from '~/common/funcs/convertCoin';
 import wareServices from '~/services/wareServices';
+import Loading from '~/components/common/Loading';
+import commonServices from '~/services/commonServices';
 
 function ChartStackArea({}: PropsChartStackArea) {
 	const [customerUuid, setCustomerUuid] = useState<string>('');
@@ -38,6 +40,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 	const [userUuid, setUserUuid] = useState<string>('');
 	const [uuidCompany, setUuidCompanyFilter] = useState<string>('');
 	const [typeDate, setTypeDate] = useState<number | null>(TYPE_DATE.LAST_7_DAYS);
+	const [provinceUuid, setProvinceUuid] = useState<string>('');
 	const [date, setDate] = useState<{
 		from: Date | null;
 		to: Date | null;
@@ -108,6 +111,20 @@ function ChartStackArea({}: PropsChartStackArea) {
 		},
 	});
 
+	const listProvince = useQuery([QUERY_KEY.dropdown_tinh_thanh_pho], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: commonServices.listProvince({
+					keyword: '',
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
 	const listRegency = useQuery([QUERY_KEY.dropdown_chuc_vu], {
 		queryFn: () =>
 			httpRequest({
@@ -151,8 +168,14 @@ function ChartStackArea({}: PropsChartStackArea) {
 		enabled: listRegency.isSuccess,
 	});
 
+	useEffect(() => {
+		if (listProductType?.data?.length > 0) {
+			setProductUuid(listProductType.data[0].uuid);
+		}
+	}, [listProductType]);
+
 	const dataBoardDailyPrice = useQuery(
-		[QUERY_KEY.thong_ke_bieu_do_gia_tien_theo_ngay, productUuid, customerUuid, date, userUuid, uuidCompany],
+		[QUERY_KEY.thong_ke_bieu_do_gia_tien_theo_ngay, productUuid, customerUuid, date, userUuid, uuidCompany, provinceUuid],
 		{
 			queryFn: () =>
 				httpRequest({
@@ -166,9 +189,11 @@ function ChartStackArea({}: PropsChartStackArea) {
 						companyUuid: uuidCompany,
 						transport_type: null,
 						productTypeUuid: productUuid,
+						provinceId: provinceUuid,
 					}),
 				}),
 			onSuccess({data}) {
+				console.log('data', data);
 				// Convert data chart
 				const dataConvert = data?.chart?.map((v: any) => {
 					const date =
@@ -181,10 +206,11 @@ function ChartStackArea({}: PropsChartStackArea) {
 							: moment(v?.time).format('YYYY');
 
 					const obj = {
-						[v?.newDaily?.maxAverage?.productTypeDTO?.name]: v?.newDaily?.maxAverage?.sumAmount || 0,
-						'Trung bình': v?.newDaily?.averageAmount || 0,
-						[v?.newDaily?.minAverage?.productTypeDTO?.name]: v?.newDaily?.minAverage?.sumAmount || 0,
-						[v?.newDaily?.customerLine?.productTypeDTO?.name]: v?.customerLine?.minAverage?.sumAmount || 0,
+						'Lớn nhất': v?.newDaily?.max || 0,
+						'Trung bình': v?.newDaily?.average || 0,
+						'Nhó nhất': v?.newDaily?.min || 0,
+						'Khách hàng': v?.newDaily?.customerLine || 0,
+						// [v?.newDaily?.customerLine?.productTypeDTO?.name]: v?.customerLine?.minAverage?.sumAmount || 0,
 					};
 
 					return {
@@ -216,20 +242,20 @@ function ChartStackArea({}: PropsChartStackArea) {
 
 						return [
 							{
-								key: maxAverage?.productTypeDTO?.name,
-								fill: maxAverage?.productTypeDTO?.colorShow,
+								key: 'Lớn nhất',
+								fill: '#2A85FF',
 							},
 							{
 								key: 'Trung bình',
-								fill: '#3CC3DF',
+								fill: '#FF6838',
 							},
 							{
-								key: minAverage?.productTypeDTO?.name,
-								fill: minAverage?.productTypeDTO?.colorShow,
+								key: 'Nhó nhất',
+								fill: '#2DA2BC',
 							},
 							{
-								key: customerLine?.productTypeDTO?.name,
-								fill: customerLine?.productTypeDTO?.colorShow,
+								key: 'Khách hàng',
+								fill: '#2CAE39',
 							},
 						];
 					})
@@ -274,6 +300,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 						placeholder='Tất cả nhà cung cấp'
 					/>
 					<SelectFilterOption
+						isShowAll={false}
 						uuid={productUuid}
 						setUuid={setProductUuid}
 						listData={listProductType?.data?.map((v: any) => ({
@@ -306,20 +333,54 @@ function ChartStackArea({}: PropsChartStackArea) {
 						}))}
 						placeholder='Tất cả kv cảng xuất khẩu'
 					/>
+					<SelectFilterOption
+						uuid={provinceUuid}
+						setUuid={setProvinceUuid}
+						listData={listProvince?.data?.map((v: any) => ({
+							uuid: v?.matp,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả tỉnh thành'
+					/>
 				</div>
 			</div>
 			<div className={styles.head_data}>
-				{dataBoardDailyPrice?.data?.data?.overview?.map((v: any, i: number) => (
-					<p key={i} className={styles.data_total}>
-						<div className={styles.wrapper}>
-							<div className={styles.line} style={{background: v?.productTypeDTO?.colorShow}}></div>
-							<div className={styles.circle} style={{borderColor: v?.productTypeDTO?.colorShow}}></div>
-						</div>
-						<div>
-							{v?.productTypeDTO?.name}: <span>{convertCoin(v?.averageAmount)} (VNĐ)</span>
-						</div>
-					</p>
-				))}
+				<p className={styles.data_total}>
+					<div className={styles.wrapper}>
+						<div className={styles.line} style={{background: '#2A85FF'}}></div>
+						<div className={styles.circle} style={{borderColor: '#2A85FF'}}></div>
+					</div>
+					<div>
+						Lớn nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.max)} (VNĐ)</span>
+					</div>
+				</p>
+				<p className={styles.data_total}>
+					<div className={styles.wrapper}>
+						<div className={styles.line} style={{background: '#FF6838'}}></div>
+						<div className={styles.circle} style={{borderColor: '#FF6838'}}></div>
+					</div>
+					<div>
+						Lớn nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.averageAmount)} (VNĐ)</span>
+					</div>
+				</p>
+				<p className={styles.data_total}>
+					<div className={styles.wrapper}>
+						<div className={styles.line} style={{background: '#2DA2BC'}}></div>
+						<div className={styles.circle} style={{borderColor: '#2DA2BC'}}></div>
+					</div>
+					<div>
+						Nhỏ nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.min)} (VNĐ)</span>
+					</div>
+				</p>
+				<p className={styles.data_total}>
+					<div className={styles.wrapper}>
+						<div className={styles.line} style={{background: '#2CAE39'}}></div>
+						<div className={styles.circle} style={{borderColor: '#2CAE39'}}></div>
+					</div>
+					<div>
+						Lớn nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.customerLine)} (VNĐ)</span>
+					</div>
+				</p>
 			</div>
 			<div className={styles.main_chart}>
 				<ResponsiveContainer width='100%' height='100%'>
