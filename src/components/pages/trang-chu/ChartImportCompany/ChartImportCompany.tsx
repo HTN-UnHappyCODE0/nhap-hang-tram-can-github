@@ -32,10 +32,13 @@ import userServices from '~/services/userServices';
 import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 import router from 'next/router';
 import companyServices from '~/services/companyServices';
+import commonServices from '~/services/commonServices';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
+	const [isProductSpec, setIsProductSpec] = useState<string>('1');
 	const [customerUuid, setCustomerUuid] = useState<string>('');
+	const [provinceUuid, setProvinceUuid] = useState<string>('');
 	const [userUuid, setUserUuid] = useState<string>('');
 	const [storageUuid, setStorageUuid] = useState<string>('');
 	const [typeDate, setTypeDate] = useState<number | null>(TYPE_DATE.LAST_7_DAYS);
@@ -125,6 +128,20 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		},
 	});
 
+	const listProvince = useQuery([QUERY_KEY.dropdown_tinh_thanh_pho], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: commonServices.listProvince({
+					keyword: '',
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
 	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
 		queryFn: () =>
 			httpRequest({
@@ -169,80 +186,94 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		enabled: listRegency.isSuccess,
 	});
 
-	useQuery([QUERY_KEY.thong_ke_tong_hang_nhap, customerUuid, storageUuid, isShowBDMT, date, userUuid, uuidCompany], {
-		queryFn: () =>
-			httpRequest({
-				isData: true,
-				http: batchBillServices.dashbroadBillIn({
-					partnerUuid: '',
-					customerUuid: customerUuid,
-					isShowBDMT: Number(isShowBDMT),
-					storageUuid: storageUuid,
-					UserOwnerUuid: userUuid,
-					warehouseUuid: '',
-					companyUuid: uuidCompany,
-					typeFindDay: 0,
-					timeStart: timeSubmit(date?.from)!,
-					timeEnd: timeSubmit(date?.to, true)!,
+	useQuery(
+		[
+			QUERY_KEY.thong_ke_tong_hang_nhap,
+			customerUuid,
+			storageUuid,
+			isShowBDMT,
+			date,
+			userUuid,
+			uuidCompany,
+			isProductSpec,
+			provinceUuid,
+		],
+		{
+			queryFn: () =>
+				httpRequest({
+					isData: true,
+					http: batchBillServices.dashbroadBillIn({
+						partnerUuid: '',
+						customerUuid: customerUuid,
+						isShowBDMT: Number(isShowBDMT),
+						storageUuid: storageUuid,
+						userOwnerUuid: userUuid,
+						warehouseUuid: '',
+						companyUuid: uuidCompany,
+						typeFindDay: 0,
+						timeStart: timeSubmit(date?.from)!,
+						timeEnd: timeSubmit(date?.to, true)!,
+						provinceId: provinceUuid,
+					}),
 				}),
-			}),
-		onSuccess({data}) {
-			// Convert data chart
-			const dataConvert = data?.lstProductDay?.map((v: any) => {
-				const date =
-					data?.typeShow == TYPE_DATE_SHOW.HOUR
-						? moment(v?.timeScale).format('HH:mm')
-						: data?.typeShow == TYPE_DATE_SHOW.DAY
-						? moment(v?.timeScale).format('DD/MM')
-						: data?.typeShow == TYPE_DATE_SHOW.MONTH
-						? moment(v?.timeScale).format('MM-YYYY')
-						: moment(v?.timeScale).format('YYYY');
+			onSuccess({data}) {
+				// Convert data chart
+				const dataConvert = data?.lstProductDay?.map((v: any) => {
+					const date =
+						data?.typeShow == TYPE_DATE_SHOW.HOUR
+							? moment(v?.timeScale).format('HH:mm')
+							: data?.typeShow == TYPE_DATE_SHOW.DAY
+							? moment(v?.timeScale).format('DD/MM')
+							: data?.typeShow == TYPE_DATE_SHOW.MONTH
+							? moment(v?.timeScale).format('MM-YYYY')
+							: moment(v?.timeScale).format('YYYY');
 
-				const obj = v?.productDateWeightUu?.reduce((acc: any, item: any) => {
-					acc[item.productTypeUu.name] = item.weightMT;
+					const obj = v?.[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu']?.reduce((acc: any, item: any) => {
+						acc[item.productTypeUu.name] = item.weightMT;
 
-					return acc;
-				}, {});
+						return acc;
+					}, {});
 
-				return {
-					name: date,
-					...obj,
-				};
-			});
+					return {
+						name: date,
+						...obj,
+					};
+				});
 
-			// Convert bar chart
-			const productColors = data?.lstProductDay
-				?.flatMap((item: any) =>
-					item.productDateWeightUu.map((product: any) => ({
-						name: product.productTypeUu.name,
-						color: product.productTypeUu.colorShow,
-					}))
-				)
-				.reduce((acc: any, {name, color}: {name: string; color: string}) => {
-					if (!acc[name]) {
-						acc[name] = color;
-					}
-					return acc;
-				}, {});
+				// Convert bar chart
+				const productColors = data?.lstProductDay
+					?.flatMap((item: any) =>
+						item[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu'].map((product: any) => ({
+							name: product.productTypeUu.name,
+							color: product.productTypeUu.colorShow,
+						}))
+					)
+					.reduce((acc: any, {name, color}: {name: string; color: string}) => {
+						if (!acc[name]) {
+							acc[name] = color;
+						}
+						return acc;
+					}, {});
 
-			const productTypes = Object.keys(productColors).map((key) => ({
-				key,
-				fill: productColors[key],
-			}));
+				const productTypes = Object.keys(productColors).map((key) => ({
+					key,
+					fill: productColors[key],
+				}));
 
-			setDataChart(dataConvert);
-			setProductTypes(productTypes);
+				setDataChart(dataConvert);
+				setProductTypes(productTypes);
 
-			setDataTotal({
-				totalWeight: data?.totalWeight,
-				lstProductTotal: data?.lstProductTotal?.map((v: any) => ({
-					name: v?.productTypeUu?.name,
-					colorShow: v?.productTypeUu?.colorShow,
-					weightMT: v?.weightMT,
-				})),
-			});
-		},
-	});
+				setDataTotal({
+					totalWeight: data?.totalWeight,
+					lstProductTotal: (isProductSpec === '2' ? data?.lstSpecTotal : data?.lstProductTotal)?.map((v: any) => ({
+						name: v?.productTypeUu?.name,
+						colorShow: v?.productTypeUu?.colorShow,
+						weightMT: v?.weightMT,
+					})),
+				});
+			},
+		}
+	);
 
 	return (
 		<div className={styles.container}>
@@ -264,6 +295,16 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 							},
 						]}
 						placeholder='Tấn hàng'
+					/>
+
+					<SelectFilterOption
+						uuid={uuidCompany}
+						setUuid={setUuidCompanyFilter}
+						listData={listCompany?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả kv cảng xuất khẩu'
 					/>
 					<SelectFilterOption
 						uuid={customerUuid}
@@ -299,13 +340,29 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						/>
 					</CheckRegencyCode>
 					<SelectFilterOption
-						uuid={uuidCompany}
-						setUuid={setUuidCompanyFilter}
-						listData={listCompany?.data?.map((v: any) => ({
-							uuid: v?.uuid,
+						isShowAll={false}
+						uuid={isProductSpec}
+						setUuid={setIsProductSpec}
+						listData={[
+							{
+								uuid: String(1),
+								name: 'Loại hàng',
+							},
+							{
+								uuid: String(2),
+								name: 'Quy cách',
+							},
+						]}
+						placeholder='Kiểu'
+					/>
+					<SelectFilterOption
+						uuid={provinceUuid}
+						setUuid={setProvinceUuid}
+						listData={listProvince?.data?.map((v: any) => ({
+							uuid: v?.matp,
 							name: v?.name,
 						}))}
-						placeholder='Tất cả kv cảng xuất khẩu'
+						placeholder='Tất cả tỉnh thành'
 					/>
 				</div>
 			</div>
