@@ -44,56 +44,6 @@ function ChartStackArea({}: PropsChartStackArea) {
 	} | null>(null);
 	const [dataChart, setDataChart] = useState<any[]>([]);
 	const [productTypes, setProductTypes] = useState<any[]>([]);
-	const data = [
-		{
-			name: 'Page A',
-			uv: 4000,
-			pv: 2400,
-			amt: 2400,
-		},
-		{
-			name: 'Page B',
-			uv: 3000,
-			pv: 1398,
-			amt: 2210,
-		},
-		{
-			name: 'Page C',
-			uv: 2000,
-			pv: 9800,
-			amt: 2290,
-		},
-		{
-			name: 'Page D',
-			uv: 2780,
-			pv: 3908,
-			amt: 2000,
-		},
-		{
-			name: 'Page E',
-			uv: 1890,
-			pv: 4800,
-			amt: 2181,
-		},
-		{
-			name: 'Page F',
-			uv: 2390,
-			pv: 3800,
-			amt: 2500,
-		},
-		{
-			name: 'Page G',
-			uv: 3490,
-			pv: 4300,
-			amt: 2100,
-		},
-		{
-			name: 'Page H',
-			uv: 3490,
-			pv: 4300,
-			amt: 2100,
-		},
-	];
 
 	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap], {
 		queryFn: () =>
@@ -131,7 +81,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					isPaging: CONFIG_PAGING.NO_PAGING,
 					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
 					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
-					type: [TYPE_PRODUCT.CONG_TY, TYPE_PRODUCT.DUNG_CHUNG],
+					type: [TYPE_PRODUCT.CONG_TY],
 				}),
 			}),
 		select(data) {
@@ -391,18 +341,12 @@ function ChartStackArea({}: PropsChartStackArea) {
 
 						{productTypes.map((v) => (
 							<>
-								<defs key={v?.key}>
-									<linearGradient id={v?.key} x1='0' y1='0' x2='0' y2='1'>
-										<stop offset='0%' stopColor={v?.fill} stopOpacity={1} />
-										<stop offset='100%' stopColor={v?.fill} stopOpacity={0.05} />
-									</linearGradient>
-								</defs>
 								<Area
 									key={v?.key}
 									type='linear'
 									dataKey={v?.key}
 									stroke={v?.fill}
-									fill={v?.fill}
+									fill='none'
 									dot={{r: 4, fill: '#fff', stroke: v?.fill, strokeWidth: 2}}
 								/>
 							</>
