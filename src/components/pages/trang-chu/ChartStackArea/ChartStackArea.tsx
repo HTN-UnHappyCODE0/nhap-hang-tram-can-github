@@ -360,7 +360,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 						<div className={styles.circle} style={{borderColor: '#FF6838'}}></div>
 					</div>
 					<div>
-						Lớn nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.averageAmount)} (VNĐ)</span>
+						Trung bình:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.averageAmount)} (VNĐ)</span>
 					</div>
 				</p>
 				<p className={styles.data_total}>
@@ -378,7 +378,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 						<div className={styles.circle} style={{borderColor: '#2CAE39'}}></div>
 					</div>
 					<div>
-						Lớn nhất:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.customerLine)} (VNĐ)</span>
+						Khách hàng:<span>{convertCoin(dataBoardDailyPrice?.data?.data?.overview?.customerLine)} (VNĐ)</span>
 					</div>
 				</p>
 			</div>
