@@ -48,7 +48,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 	const [dataChart, setDataChart] = useState<any[]>([]);
 	const [productTypes, setProductTypes] = useState<any[]>([]);
 
-	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap], {
+	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap, uuidCompany], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -65,6 +65,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					typeCus: TYPE_CUSTOMER.NHA_CUNG_CAP,
 					provinceId: '',
 					specUuid: '',
+					companyUuid: uuidCompany,
 				}),
 			}),
 		select(data) {
@@ -167,12 +168,6 @@ function ChartStackArea({}: PropsChartStackArea) {
 		},
 		enabled: listRegency.isSuccess,
 	});
-
-	useEffect(() => {
-		if (listProductType?.data?.length > 0) {
-			setProductUuid(listProductType.data[0].uuid);
-		}
-	}, [listProductType]);
 
 	const dataBoardDailyPrice = useQuery(
 		[QUERY_KEY.thong_ke_bieu_do_gia_tien_theo_ngay, productUuid, customerUuid, date, userUuid, uuidCompany, provinceUuid],
@@ -285,11 +280,32 @@ function ChartStackArea({}: PropsChartStackArea) {
 		}
 	);
 
+	useEffect(() => {
+		if (uuidCompany) {
+			setCustomerUuid('');
+		}
+	}, [uuidCompany]);
+
+	useEffect(() => {
+		if (listProductType?.data?.length > 0) {
+			setProductUuid(listProductType.data[listProductType.data.length - 1].uuid);
+		}
+	}, [listProductType.data]);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.head}>
 				<h3>Biểu đồ giá tiền nhập hàng (VNĐ)</h3>
 				<div className={styles.filter}>
+					<SelectFilterOption
+						uuid={uuidCompany}
+						setUuid={setUuidCompanyFilter}
+						listData={listCompany?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả kv cảng xuất khẩu'
+					/>
 					<SelectFilterOption
 						uuid={customerUuid}
 						setUuid={setCustomerUuid}
@@ -297,7 +313,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 							uuid: v?.uuid,
 							name: v?.name,
 						}))}
-						placeholder='Tất cả nhà cung cấp'
+						placeholder='nhà cung cấp'
 					/>
 					<SelectFilterOption
 						isShowAll={false}
@@ -324,15 +340,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 							placeholder='Tất cả người quản lý mua hàng'
 						/>
 					</CheckRegencyCode>
-					<SelectFilterOption
-						uuid={uuidCompany}
-						setUuid={setUuidCompanyFilter}
-						listData={listCompany?.data?.map((v: any) => ({
-							uuid: v?.uuid,
-							name: v?.name,
-						}))}
-						placeholder='Tất cả kv cảng xuất khẩu'
-					/>
+
 					<SelectFilterOption
 						uuid={provinceUuid}
 						setUuid={setProvinceUuid}
