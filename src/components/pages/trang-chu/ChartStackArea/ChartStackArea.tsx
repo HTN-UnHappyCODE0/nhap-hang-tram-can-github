@@ -313,7 +313,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 							uuid: v?.uuid,
 							name: v?.name,
 						}))}
-						placeholder='nhà cung cấp'
+						placeholder='Nhà cung cấp'
 					/>
 					<SelectFilterOption
 						isShowAll={false}
@@ -405,7 +405,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					>
 						<CartesianGrid strokeDasharray='3 3' />
 						<XAxis dataKey='name' scale='point' padding={{left: 40}} />
-						<YAxis domain={[0, 'dataMax']} tickFormatter={(value): any => convertCoin(value)} />
+						<YAxis domain={[1000000, 'dataMax']} tickFormatter={(value): any => convertCoin(value)} />
 						<Tooltip formatter={(value): any => convertCoin(Number(value))} />
 
 						{productTypes.map((v) => (
