@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import {PropsChartStackArea} from './interfaces';
 import styles from './ChartStackArea.module.scss';
@@ -280,6 +280,23 @@ function ChartStackArea({}: PropsChartStackArea) {
 		}
 	);
 
+	const filteredProductTypes = useMemo(() => {
+		if (customerUuid === '') {
+			return productTypes.filter((v) => v.key !== 'Khách hàng');
+		}
+		return productTypes;
+	}, [customerUuid, productTypes]);
+
+	const filteredDataChart = useMemo(() => {
+		if (customerUuid === '') {
+			return dataChart.map((item) => {
+				const {'Khách hàng': _, ...rest} = item;
+				return rest;
+			});
+		}
+		return dataChart;
+	}, [customerUuid, dataChart]);
+
 	useEffect(() => {
 		if (uuidCompany) {
 			setCustomerUuid('');
@@ -395,7 +412,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					<AreaChart
 						width={500}
 						height={300}
-						data={dataChart}
+						data={filteredDataChart}
 						margin={{
 							top: 8,
 							right: 8,
@@ -405,20 +422,18 @@ function ChartStackArea({}: PropsChartStackArea) {
 					>
 						<CartesianGrid strokeDasharray='3 3' />
 						<XAxis dataKey='name' scale='point' padding={{left: 40}} />
-						<YAxis domain={[1000000, 'dataMax']} tickFormatter={(value): any => convertCoin(value)} />
-						<Tooltip formatter={(value): any => convertCoin(Number(value))} />
+						<YAxis domain={[1500000, 'dataMax']} tickFormatter={(value) => convertCoin(value)} />
+						<Tooltip formatter={(value) => convertCoin(Number(value))} />
 
-						{productTypes.map((v) => (
-							<>
-								<Area
-									key={v?.key}
-									type='linear'
-									dataKey={v?.key}
-									stroke={v?.fill}
-									fill='none'
-									dot={{r: 4, fill: '#fff', stroke: v?.fill, strokeWidth: 2}}
-								/>
-							</>
+						{filteredProductTypes.map((v) => (
+							<Area
+								key={v.key}
+								type='linear'
+								dataKey={v.key}
+								stroke={v.fill}
+								fill='none'
+								dot={{r: 4, fill: '#fff', stroke: v.fill, strokeWidth: 2}}
+							/>
 						))}
 					</AreaChart>
 				</ResponsiveContainer>
