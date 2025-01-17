@@ -422,7 +422,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					>
 						<CartesianGrid strokeDasharray='3 3' />
 						<XAxis dataKey='name' scale='point' padding={{left: 40}} />
-						<YAxis domain={[1500000, 'dataMax']} tickFormatter={(value) => convertCoin(value)} />
+						<YAxis domain={[2000000, 'dataMax']} tickFormatter={(value) => convertCoin(value)} />
 						<Tooltip formatter={(value) => convertCoin(Number(value))} />
 
 						{filteredProductTypes.map((v) => (
