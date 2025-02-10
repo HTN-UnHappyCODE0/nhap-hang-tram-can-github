@@ -19,7 +19,7 @@ const batchBillServices = {
 			timeEnd: string | null;
 			specificationsUuid: string;
 			warehouseUuid: string;
-			customerUuid: string;
+			customerUuid: string[];
 			productTypeUuid: string;
 			qualityUuid: string;
 			transportType: number | null;
@@ -150,10 +150,11 @@ const batchBillServices = {
 			timeEnd: string;
 			isShowBDMT: number;
 			storageUuid: string;
-			customerUuid: string;
+			customerUuid: string[];
 			warehouseUuid: string;
 			userOwnerUuid: string;
 			provinceId: string;
+			transportType: number | null;
 		},
 		tokenAxios?: any
 	) => {
