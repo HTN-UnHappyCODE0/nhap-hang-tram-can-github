@@ -20,6 +20,7 @@ import {
 	TYPE_DATE,
 	TYPE_DATE_SHOW,
 	TYPE_SHOW_BDMT,
+	TYPE_TRANSPORT,
 } from '~/constants/config/enum';
 import {httpRequest} from '~/services';
 import batchBillServices from '~/services/batchBillServices';
@@ -33,11 +34,13 @@ import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 import router from 'next/router';
 import companyServices from '~/services/companyServices';
 import commonServices from '~/services/commonServices';
+import SelectFilterMany from '../SelectFilterMany';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
 	const [isProductSpec, setIsProductSpec] = useState<string>('1');
-	const [customerUuid, setCustomerUuid] = useState<string>('');
+	const [isTransport, setIsTransport] = useState<string>('');
+	const [customerUuid, setCustomerUuid] = useState<string[]>([]);
 	const [provinceUuid, setProvinceUuid] = useState<string>('');
 	const [userUuid, setUserUuid] = useState<string>('');
 	const [storageUuid, setStorageUuid] = useState<string>('');
@@ -197,6 +200,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			uuidCompany,
 			isProductSpec,
 			provinceUuid,
+			isTransport,
 		],
 		{
 			queryFn: () =>
@@ -214,6 +218,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						timeStart: timeSubmit(date?.from)!,
 						timeEnd: timeSubmit(date?.to, true)!,
 						provinceId: provinceUuid,
+						transportType: isTransport ? Number(isTransport) : null,
 					}),
 				}),
 			onSuccess({data}) {
@@ -306,9 +311,18 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						}))}
 						placeholder='Tất cả kv cảng xuất khẩu'
 					/>
-					<SelectFilterOption
+					{/* <SelectFilterOption
 						uuid={customerUuid}
 						setUuid={setCustomerUuid}
+						listData={listCustomer?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả nhà cung cấp'
+					/> */}
+					<SelectFilterMany
+						selectedIds={customerUuid}
+						setSelectedIds={setCustomerUuid}
 						listData={listCustomer?.data?.map((v: any) => ({
 							uuid: v?.uuid,
 							name: v?.name,
@@ -354,6 +368,22 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 							},
 						]}
 						placeholder='Kiểu'
+					/>
+					<SelectFilterOption
+						// isShowAll={true}
+						uuid={isTransport}
+						setUuid={setIsTransport}
+						listData={[
+							{
+								uuid: String(TYPE_TRANSPORT.DUONG_BO),
+								name: 'Đường bộ',
+							},
+							{
+								uuid: String(TYPE_TRANSPORT.DUONG_THUY),
+								name: 'Đường thủy',
+							},
+						]}
+						placeholder='Tất cả vận chuyển'
 					/>
 					<SelectFilterOption
 						uuid={provinceUuid}
