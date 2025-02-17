@@ -78,7 +78,7 @@ const weightSessionServices = {
 			isPaging: CONFIG_PAGING;
 			scalesType: number[];
 			billUuid: string;
-			truckUuid: string;
+			truckUuid: string[];
 			storageUuid: string;
 			customerUuid: string;
 			productTypeUuid: string;
