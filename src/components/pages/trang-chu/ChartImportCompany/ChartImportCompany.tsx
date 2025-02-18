@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {PropsChartImportCompany} from './interfaces';
 import styles from './ChartImportCompany.module.scss';
@@ -65,30 +65,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		lstProductTotal: [],
 	});
 
-	const listStorage = useQuery([QUERY_KEY.dropdown_bai], {
-		queryFn: () =>
-			httpRequest({
-				isDropdown: true,
-				http: storageServices.listStorage({
-					page: 1,
-					pageSize: 50,
-					keyword: '',
-					status: CONFIG_STATUS.HOAT_DONG,
-					isPaging: CONFIG_PAGING.NO_PAGING,
-					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
-					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
-					productUuid: '',
-					qualityUuid: '',
-					specificationsUuid: '',
-					warehouseUuid: '',
-				}),
-			}),
-		select(data) {
-			return data;
-		},
-	});
-
-	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap], {
+	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang_nhap, uuidCompany], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -105,6 +82,30 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					typeCus: TYPE_CUSTOMER.NHA_CUNG_CAP,
 					provinceId: '',
 					specUuid: '',
+					companyUuid: uuidCompany,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
+	const listStorage = useQuery([QUERY_KEY.dropdown_bai], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: storageServices.listStorage({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					status: CONFIG_STATUS.HOAT_DONG,
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					productUuid: '',
+					qualityUuid: '',
+					specificationsUuid: '',
+					warehouseUuid: '',
 				}),
 			}),
 		select(data) {
@@ -279,6 +280,12 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			},
 		}
 	);
+
+	useEffect(() => {
+		if (uuidCompany) {
+			setCustomerUuid([]);
+		}
+	}, [uuidCompany]);
 
 	return (
 		<div className={styles.container}>
