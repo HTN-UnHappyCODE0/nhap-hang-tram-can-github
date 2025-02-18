@@ -13,7 +13,6 @@ const weightSessionServices = {
 			isPaging: CONFIG_PAGING;
 			scalesType: number[];
 			billUuid: string;
-			truckUuid: string[];
 			storageUuid: string;
 			isBatch: number | null;
 			timeStart: string | null;
@@ -25,6 +24,8 @@ const weightSessionServices = {
 			productTypeUuid?: string | null;
 			shift?: number | null;
 			shipUuid?: string;
+			truckUuid: string;
+			listTruckUuid: string[];
 		},
 		tokenAxios?: any
 	) => {
