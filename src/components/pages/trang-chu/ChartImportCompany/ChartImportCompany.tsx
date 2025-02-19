@@ -35,6 +35,7 @@ import router from 'next/router';
 import companyServices from '~/services/companyServices';
 import commonServices from '~/services/commonServices';
 import SelectFilterMany from '../SelectFilterMany';
+import {convertCoin} from '~/common/funcs/convertCoin';
 
 function ChartImportCompany({}: PropsChartImportCompany) {
 	const [isShowBDMT, setIsShowBDMT] = useState<string>(String(TYPE_SHOW_BDMT.MT));
@@ -51,16 +52,21 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 		to: Date | null;
 	} | null>(null);
 
-	const [dataChart, setDataChart] = useState<any[]>([]);
+	const [dataChartMT, setDataChartMT] = useState<any[]>([]);
+	const [dataChartBDMT, setDataChartBDMT] = useState<any[]>([]);
 	const [productTypes, setProductTypes] = useState<any[]>([]);
 	const [dataTotal, setDataTotal] = useState<{
 		totalWeight: number;
+		drynessAvg: number;
 		lstProductTotal: {
 			name: string;
 			colorShow: string;
 			weightMT: number;
+			weightBDMT: number;
+			drynessAvg: number;
 		}[];
 	}>({
+		drynessAvg: 0,
 		totalWeight: 0,
 		lstProductTotal: [],
 	});
@@ -195,7 +201,6 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			QUERY_KEY.thong_ke_tong_hang_nhap,
 			customerUuid,
 			storageUuid,
-			isShowBDMT,
 			date,
 			userUuid,
 			uuidCompany,
@@ -210,7 +215,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					http: batchBillServices.dashbroadBillIn({
 						partnerUuid: '',
 						customerUuid: customerUuid,
-						isShowBDMT: Number(isShowBDMT),
+						isShowBDMT: 1,
 						storageUuid: storageUuid,
 						userOwnerUuid: userUuid,
 						warehouseUuid: '',
@@ -224,7 +229,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 				}),
 			onSuccess({data}) {
 				// Convert data chart
-				const dataConvert = data?.lstProductDay?.map((v: any) => {
+				const dataConvertMT = data?.lstProductDay?.map((v: any) => {
 					const date =
 						data?.typeShow == TYPE_DATE_SHOW.HOUR
 							? moment(v?.timeScale).format('HH:mm')
@@ -236,6 +241,28 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 
 					const obj = v?.[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu']?.reduce((acc: any, item: any) => {
 						acc[item.productTypeUu.name] = item.weightMT;
+
+						return acc;
+					}, {});
+
+					return {
+						name: date,
+						...obj,
+					};
+				});
+
+				const dataConvertBDMT = data?.lstProductDay?.map((v: any) => {
+					const date =
+						data?.typeShow == TYPE_DATE_SHOW.HOUR
+							? moment(v?.timeScale).format('HH:mm')
+							: data?.typeShow == TYPE_DATE_SHOW.DAY
+							? moment(v?.timeScale).format('DD/MM')
+							: data?.typeShow == TYPE_DATE_SHOW.MONTH
+							? moment(v?.timeScale).format('MM-YYYY')
+							: moment(v?.timeScale).format('YYYY');
+
+					const obj = v?.[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu']?.reduce((acc: any, item: any) => {
+						acc[item.productTypeUu.name] = item.weightBDMT;
 
 						return acc;
 					}, {});
@@ -266,15 +293,19 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					fill: productColors[key],
 				}));
 
-				setDataChart(dataConvert);
+				setDataChartMT(dataConvertMT);
+				setDataChartBDMT(dataConvertBDMT);
 				setProductTypes(productTypes);
 
 				setDataTotal({
 					totalWeight: data?.totalWeight,
+					drynessAvg: data?.drynessAvg,
 					lstProductTotal: (isProductSpec === '2' ? data?.lstSpecTotal : data?.lstProductTotal)?.map((v: any) => ({
 						name: v?.productTypeUu?.name,
 						colorShow: v?.productTypeUu?.colorShow,
 						weightMT: v?.weightMT,
+						weightBDMT: v?.weightBDMT,
+						drynessAvg: v?.drynessAvg,
 					})),
 				});
 			},
@@ -407,11 +438,18 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 				<p className={styles.data_total}>
 					Tổng khối lượng nhập hàng: <span>{convertWeight(dataTotal?.totalWeight)}</span>
 				</p>
+				<p className={styles.data_total}>
+					Độ khô: <span>{dataTotal?.drynessAvg?.toFixed(2)}%</span>
+				</p>
 				{dataTotal?.lstProductTotal?.map((v, i) => (
 					<div key={i} className={styles.data_item}>
 						<div style={{background: v?.colorShow}} className={styles.box_color}></div>
 						<p className={styles.data_total}>
-							{v?.name}: <span style={{color: '#171832'}}>{convertWeight(v?.weightMT)}</span>
+							{v?.name}:{' '}
+							<span style={{color: '#171832'}}>
+								{isShowBDMT === String(TYPE_SHOW_BDMT.MT) ? convertWeight(v?.weightMT) : convertWeight(v?.weightBDMT)}
+								<span> ({v?.drynessAvg?.toFixed(2)})%</span>
+							</span>
 						</p>
 					</div>
 				))}
@@ -421,7 +459,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					<BarChart
 						width={500}
 						height={300}
-						data={dataChart}
+						data={isShowBDMT === String(TYPE_SHOW_BDMT.MT) ? dataChartMT : dataChartBDMT}
 						margin={{
 							top: 8,
 							right: 8,
