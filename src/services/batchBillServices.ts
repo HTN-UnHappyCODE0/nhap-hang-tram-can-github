@@ -150,7 +150,7 @@ const batchBillServices = {
 			typeFindDay: number;
 			timeStart: string;
 			timeEnd: string;
-			isShowBDMT: number;
+			isShowBDMT: number | null;
 			storageUuid: string;
 			customerUuid: string[];
 			warehouseUuid: string;
