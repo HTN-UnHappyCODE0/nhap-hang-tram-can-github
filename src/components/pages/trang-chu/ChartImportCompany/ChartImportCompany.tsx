@@ -57,6 +57,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 	const [productTypes, setProductTypes] = useState<any[]>([]);
 	const [dataTotal, setDataTotal] = useState<{
 		totalWeight: number;
+		totalWeightBDMT: number;
 		drynessAvg: number;
 		lstProductTotal: {
 			name: string;
@@ -66,6 +67,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			drynessAvg: number;
 		}[];
 	}>({
+		totalWeightBDMT: 0,
 		drynessAvg: 0,
 		totalWeight: 0,
 		lstProductTotal: [],
@@ -299,6 +301,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 
 				setDataTotal({
 					totalWeight: data?.totalWeight,
+					totalWeightBDMT: data?.totalWeightBDMT,
 					drynessAvg: data?.drynessAvg,
 					lstProductTotal: (isProductSpec === '2' ? data?.lstSpecTotal : data?.lstProductTotal)?.map((v: any) => ({
 						name: v?.productTypeUu?.name,
@@ -436,7 +439,13 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			</div>
 			<div className={styles.head_data}>
 				<p className={styles.data_total}>
-					Tổng khối lượng nhập hàng: <span>{convertWeight(dataTotal?.totalWeight)}</span>
+					Tổng khối lượng nhập hàng:{' '}
+					<span>
+						{convertWeight(dataTotal?.totalWeight)}
+						{isShowBDMT === String(TYPE_SHOW_BDMT.MT)
+							? convertWeight(dataTotal?.totalWeight)
+							: convertWeight(dataTotal?.totalWeightBDMT)}
+					</span>
 				</p>
 				<p className={styles.data_total}>
 					Độ khô: <span>{dataTotal?.drynessAvg?.toFixed(2)}%</span>
