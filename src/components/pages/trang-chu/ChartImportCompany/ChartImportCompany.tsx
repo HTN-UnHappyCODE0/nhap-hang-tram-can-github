@@ -243,7 +243,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 
 					const obj = v?.[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu']?.reduce((acc: any, item: any) => {
 						acc[item.productTypeUu.name] = item.weightMT;
-
+						acc[`${item.productTypeUu.name}_drynessAvg`] = item.drynessAvg;
 						return acc;
 					}, {});
 
@@ -314,6 +314,8 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			},
 		}
 	);
+
+	console.log('dataConvertMT', dataChartMT);
 
 	useEffect(() => {
 		if (uuidCompany) {
@@ -441,15 +443,13 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 				<p className={styles.data_total}>
 					Tổng khối lượng nhập hàng:{' '}
 					<span>
-						{convertWeight(dataTotal?.totalWeight)}
 						{isShowBDMT === String(TYPE_SHOW_BDMT.MT)
 							? convertWeight(dataTotal?.totalWeight)
 							: convertWeight(dataTotal?.totalWeightBDMT)}
+						<span> ({dataTotal?.drynessAvg?.toFixed(2)}%)</span>
 					</span>
 				</p>
-				<p className={styles.data_total}>
-					Độ khô: <span>{dataTotal?.drynessAvg?.toFixed(2)}%</span>
-				</p>
+
 				{dataTotal?.lstProductTotal?.map((v, i) => (
 					<div key={i} className={styles.data_item}>
 						<div style={{background: v?.colorShow}} className={styles.box_color}></div>
@@ -457,7 +457,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 							{v?.name}:{' '}
 							<span style={{color: '#171832'}}>
 								{isShowBDMT === String(TYPE_SHOW_BDMT.MT) ? convertWeight(v?.weightMT) : convertWeight(v?.weightBDMT)}
-								<span> ({v?.drynessAvg?.toFixed(2)})%</span>
+								<span> ({v?.drynessAvg?.toFixed(2)}%)</span>
 							</span>
 						</p>
 					</div>
@@ -479,7 +479,13 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					>
 						<XAxis dataKey='name' scale='point' padding={{left: 40, right: 10}} />
 						<YAxis domain={[0, 4000000]} tickFormatter={(value): any => convertWeight(value)} />
-						<Tooltip formatter={(value): any => convertWeight(Number(value))} />
+						<Tooltip
+							formatter={(value, name, props): any => {
+								const dryness = props?.payload?.[`${name}_drynessAvg`] ?? 0;
+								return [`${convertWeight(Number(value))} (${dryness?.toFixed(2)}%)`, name];
+							}}
+						/>
+
 						<CartesianGrid strokeDasharray='3 3' vertical={false} />
 						{productTypes.map((v, i) => (
 							<Bar key={i} dataKey={v?.key} stackId='product_type' fill={v?.fill} />
