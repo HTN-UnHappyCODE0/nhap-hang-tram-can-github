@@ -41,6 +41,8 @@ import TagStatusSpecCustomer from './TagStatusSpecCustomer';
 import userServices from '~/services/userServices';
 import regencyServices from '~/services/regencyServices';
 import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
+import SelectFilterState from '~/components/common/SelectFilterState';
+import companyServices from '~/services/companyServices';
 
 function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 	const router = useRouter();
@@ -49,6 +51,26 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 		router.query;
 
 	const [dataUpdate, setDataUpdate] = useState<IPriceTag | null>(null);
+	const [uuidCompany, setUuidCompany] = useState<string>('');
+
+	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: companyServices.listCompany({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
 		queryFn: () =>
@@ -147,6 +169,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 			_state,
 			_transportType,
 			_status,
+			uuidCompany,
 		],
 		{
 			queryFn: () =>
@@ -169,6 +192,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 						transportType: !!_transportType ? Number(_transportType) : null,
 						userUuid: (_userUuid as string) || '',
 						parentUserUuid: (_parentUserUuid as string) || '',
+						companyUuid: uuidCompany,
 					}),
 				}),
 			select(data) {
@@ -199,6 +223,17 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 				<div className={styles.main_search}>
 					<div className={styles.search}>
 						<Search keyName='_keyword' placeholder='Tìm kiếm theo nhà cung cấp, công ty' />
+					</div>
+					<div className={styles.filter}>
+						<SelectFilterState
+							uuid={uuidCompany}
+							setUuid={setUuidCompany}
+							listData={listCompany?.data?.map((v: any) => ({
+								uuid: v?.uuid,
+								name: v?.name,
+							}))}
+							placeholder='Kv cảng xuất khẩu'
+						/>
 					</div>
 					<div className={styles.filter}>
 						<FilterCustom
@@ -386,7 +421,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					currentPage={Number(_page) || 1}
 					total={listPriceTag?.data?.pagination?.totalCount}
 					pageSize={Number(_pageSize) || 200}
-					dependencies={[_pageSize, _keyword, _specUuid, _productTypeUuid, _transportType, _status]}
+					dependencies={[_pageSize, _keyword, _specUuid, _productTypeUuid, _transportType, _status, uuidCompany]}
 				/>
 			</div>
 

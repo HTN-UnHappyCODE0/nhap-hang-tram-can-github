@@ -3,6 +3,7 @@ import TippyHeadless from '@tippyjs/react/headless';
 import clsx from 'clsx';
 import {BiCheck} from 'react-icons/bi';
 import {ArrowDown2} from 'iconsax-react';
+
 import {removeVietnameseTones} from '~/common/funcs/optionConvert';
 import {PropsSelectFilterMany} from './interfaces';
 import styles from './SelectFilterMany.module.scss';
@@ -17,7 +18,9 @@ function SelectFilterMany({selectedIds, setSelectedIds, listData, name, isShowAl
 
 	const filteredData = useMemo(() => {
 		const searchKey = removeVietnameseTones(keyword).toLowerCase();
-		return Array.isArray(listData) ? listData.filter((v) => removeVietnameseTones(v.name).toLowerCase().includes(searchKey)) : [];
+		return Array.isArray(listData)
+			? listData.filter((v) => v.name && removeVietnameseTones(v.name).toLowerCase().includes(searchKey))
+			: [];
 	}, [keyword, listData]);
 
 	const handleSelectItem = (uuid: string) => {
@@ -96,9 +99,9 @@ function SelectFilterMany({selectedIds, setSelectedIds, listData, name, isShowAl
 						{selectedIds.length === 0
 							? 'Tất cả'
 							: listData
-									.filter((v) => selectedIds.includes(v.uuid))
-									.map((v) => v.name)
-									.join(', ')}
+									?.filter((v) => selectedIds?.includes(v.uuid))
+									?.map((v) => v.name)
+									?.join(', ')}
 					</p>
 				</div>
 
