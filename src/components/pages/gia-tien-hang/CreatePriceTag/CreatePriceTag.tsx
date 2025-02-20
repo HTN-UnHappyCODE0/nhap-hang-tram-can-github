@@ -152,7 +152,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 				http: priceTagServices.addPricetagToCustomer({
 					infoSpec: [
 						{
-							specUuid: null,
+							specUuid: form.specUuid,
 							status: CONFIG_STATUS.HOAT_DONG,
 							state: form.state,
 							productTypeUuid: form.productTypeUuid,
@@ -260,70 +260,6 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								Đang cung cấp
 							</label>
 						</div>
-					</div>
-					<div className={clsx('mt', 'col_3')}>
-						<div>
-							<Select
-								isSearch
-								name='productTypeUuid'
-								value={form.productTypeUuid}
-								placeholder='Lựa chọn loại hàng'
-								onChange={(e: any) =>
-									setForm((prev: any) => ({
-										...prev,
-										productTypeUuid: e.target.value,
-										specUuid: '',
-									}))
-								}
-								label={
-									<span>
-										Loại hàng <span style={{color: 'red'}}>*</span>
-									</span>
-								}
-							>
-								{listProductType?.data?.map((value: any) => (
-									<Option key={value.uuid} title={value.name} value={value.uuid} />
-								))}
-							</Select>
-						</div>
-						{/* <Select
-							isSearch
-							name='specUuid'
-							placeholder='Lựa chọn quy cách'
-							value={form.specUuid}
-							onChange={(e: any) =>
-								setForm((prev: any) => ({
-									...prev,
-									specUuid: e.target.value,
-								}))
-							}
-							label={
-								<span>
-									Quy cách <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-							readOnly={!form.productTypeUuid}
-						>
-							{listSpecifications?.data?.map((value: any) => (
-								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
-							))}
-						</Select> */}
-						<SelectSearch
-							isConvertNumber={true}
-							options={listPriceTag?.data?.map((v: any) => ({
-								id: v?.uuid,
-								name: String(v?.amount),
-							}))}
-							data={priceTag}
-							setData={setPriceTag}
-							label={
-								<span>
-									Giá tiền áp dụng <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-							placeholder='Nhập giá tiền'
-						/>
-
 						<div className={styles.item}>
 							<label className={styles.label}>
 								Hình thức vận chuyển <span style={{color: 'red'}}>*</span>
@@ -361,6 +297,69 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className={clsx('mt', 'col_3')}>
+						<div>
+							<Select
+								isSearch
+								name='productTypeUuid'
+								value={form.productTypeUuid}
+								placeholder='Lựa chọn loại hàng'
+								onChange={(e: any) =>
+									setForm((prev: any) => ({
+										...prev,
+										productTypeUuid: e.target.value,
+										specUuid: '',
+									}))
+								}
+								label={
+									<span>
+										Loại hàng <span style={{color: 'red'}}>*</span>
+									</span>
+								}
+							>
+								{listProductType?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
+						</div>
+						<Select
+							isSearch
+							name='specUuid'
+							placeholder='Lựa chọn quy cách'
+							value={form.specUuid}
+							onChange={(e: any) =>
+								setForm((prev: any) => ({
+									...prev,
+									specUuid: e.target.value,
+								}))
+							}
+							label={
+								<span>
+									Quy cách <span style={{color: 'red'}}>*</span>
+								</span>
+							}
+							readOnly={!form.productTypeUuid}
+						>
+							{listSpecifications?.data?.map((value: any) => (
+								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
+							))}
+						</Select>
+						<SelectSearch
+							isConvertNumber={true}
+							options={listPriceTag?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: String(v?.amount),
+							}))}
+							data={priceTag}
+							setData={setPriceTag}
+							label={
+								<span>
+									Giá tiền áp dụng <span style={{color: 'red'}}>*</span>
+								</span>
+							}
+							placeholder='Nhập giá tiền'
+						/>
 					</div>
 				</div>
 			</Form>

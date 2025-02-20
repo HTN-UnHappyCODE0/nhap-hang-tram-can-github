@@ -265,7 +265,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 
 					const obj = v?.[isProductSpec === '2' ? 'specDateWeightUu' : 'productDateWeightUu']?.reduce((acc: any, item: any) => {
 						acc[item.productTypeUu.name] = item.weightBDMT;
-
+						acc[`${item.productTypeUu.name}_drynessAvg`] = item.drynessAvg;
 						return acc;
 					}, {});
 
@@ -314,8 +314,6 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 			},
 		}
 	);
-
-	console.log('dataConvertMT', dataChartMT);
 
 	useEffect(() => {
 		if (uuidCompany) {
