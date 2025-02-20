@@ -134,20 +134,27 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 			return toastWarn({msg: 'Không tìm thấy giá thay đổi!'});
 		}
 
-		if (!!form.timeStart) {
-			const timeStart = new Date(form.timeStart);
-			if (timeStart < new Date()) {
-				return toastWarn({msg: 'Ngày bắt đầu phải lớn hơn ngày hiện tại!'});
-			}
+		// if (!!form.timeStart) {
+		// 	const timeStart = new Date(form.timeStart);
+		// 	if (timeStart < new Date()) {
+		// 		return toastWarn({msg: 'Ngày bắt đầu phải lớn hơn ngày hiện tại!'});
+		// 	}
+		// }
+
+		if (!form.timeStart) {
+			return toastWarn({msg: 'Vui lòng chọn ngày bắt đầu!'});
+		}
+		if (!form.timeEnd) {
+			return toastWarn({msg: 'Vui lòng chọn ngày kết thúc!'});
 		}
 
 		if (!!form.timeEnd) {
 			const timeStart = new Date(form.timeStart);
 			const timeEnd = new Date(form.timeEnd);
 
-			if (timeEnd < new Date()) {
-				return toastWarn({msg: 'Ngày kết thúc phải lớn hơn ngày hiện tại!'});
-			}
+			// if (timeEnd < new Date()) {
+			// 	return toastWarn({msg: 'Ngày kết thúc phải lớn hơn ngày hiện tại!'});
+			// }
 
 			if (timeStart > timeEnd) {
 				return toastWarn({msg: 'Ngày kết thúc không nhỏ hơn ngày bắt đầu!'});
@@ -216,7 +223,11 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 						<div className={clsx('mt', 'col_2')}>
 							<DatePicker
 								icon={true}
-								label={<span>Từ ngày</span>}
+								label={
+									<span>
+										Từ ngày<span style={{color: 'red'}}>*</span>
+									</span>
+								}
 								placeholder='Chọn ngày'
 								value={form?.timeStart}
 								onSetValue={(date) =>
@@ -231,7 +242,11 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 							<div>
 								<DatePicker
 									icon={true}
-									label={<span>Đến ngày</span>}
+									label={
+										<span>
+											Đến ngày<span style={{color: 'red'}}>*</span>
+										</span>
+									}
 									placeholder='Chọn ngày'
 									value={form?.timeEnd}
 									onSetValue={(date) => {
@@ -302,7 +317,7 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 												<PiSealWarningFill size={20} color='#2D74FF' className={styles.icon_warn} />
 												<div className={styles.note}>
 													<p>
-														giá tiền pháp dụng sau ngày{' '}
+														giá tiền pháp dụng sau ngày
 														<>
 															{form?.timeEnd ? (
 																<Moment date={form?.timeEnd} format='DD/MM/YYYY' />
