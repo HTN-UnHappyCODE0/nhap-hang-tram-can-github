@@ -13,7 +13,6 @@ import {
 	CONFIG_STATUS,
 	CONFIG_TYPE_FIND,
 	QUERY_KEY,
-	REGENCY_CODE,
 	REGENCY_NAME,
 	TYPE_PRODUCT,
 	TYPE_TRANSPORT,
@@ -40,7 +39,6 @@ import {FaHistory} from 'react-icons/fa';
 import TagStatusSpecCustomer from './TagStatusSpecCustomer';
 import userServices from '~/services/userServices';
 import regencyServices from '~/services/regencyServices';
-import CheckRegencyCode from '~/components/protected/CheckRegencyCode';
 import SelectFilterState from '~/components/common/SelectFilterState';
 import companyServices from '~/services/companyServices';
 
@@ -52,25 +50,6 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 
 	const [dataUpdate, setDataUpdate] = useState<IPriceTag | null>(null);
 	const [uuidCompany, setUuidCompany] = useState<string>('');
-
-	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
-		queryFn: () =>
-			httpRequest({
-				isDropdown: true,
-				http: companyServices.listCompany({
-					page: 1,
-					pageSize: 50,
-					keyword: '',
-					isPaging: CONFIG_PAGING.NO_PAGING,
-					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
-					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
-					status: CONFIG_STATUS.HOAT_DONG,
-				}),
-			}),
-		select(data) {
-			return data;
-		},
-	});
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
 		queryFn: () =>
@@ -85,6 +64,24 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
 					status: CONFIG_STATUS.HOAT_DONG,
 					type: [TYPE_PRODUCT.CONG_TY],
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: companyServices.listCompany({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
 				}),
 			}),
 		select(data) {
@@ -224,6 +221,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 					<div className={styles.search}>
 						<Search keyName='_keyword' placeholder='Tìm kiếm theo nhà cung cấp, công ty' />
 					</div>
+
 					<div className={styles.filter}>
 						<SelectFilterState
 							uuid={uuidCompany}
@@ -246,35 +244,30 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 							}))}
 						/>
 					</div>
-					<CheckRegencyCode
-						isPage={false}
-						regencys={[REGENCY_CODE.GIAM_DOC, REGENCY_CODE.PHO_GIAM_DOC, REGENCY_CODE.QUAN_LY_NHAP_HANG]}
-					>
-						<>
-							<div className={styles.filter}>
-								<FilterCustom
-									isSearch
-									name='Quản lý nhập hàng'
-									query='_parentUserUuid'
-									listFilter={listUserPurchasing?.data?.map((v: any) => ({
-										id: v?.uuid,
-										name: v?.fullName,
-									}))}
-								/>
-							</div>
-							<div className={styles.filter}>
-								<FilterCustom
-									isSearch
-									name='Nhân viên thị trường'
-									query='_userUuid'
-									listFilter={listUserMarket?.data?.map((v: any) => ({
-										id: v?.uuid,
-										name: v?.fullName,
-									}))}
-								/>
-							</div>
-						</>
-					</CheckRegencyCode>
+
+					<div className={styles.filter}>
+						<FilterCustom
+							isSearch
+							name='Quản lý nhập hàng'
+							query='_parentUserUuid'
+							listFilter={listUserPurchasing?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: v?.fullName,
+							}))}
+						/>
+					</div>
+					<div className={styles.filter}>
+						<FilterCustom
+							isSearch
+							name='Nhân viên thị trường'
+							query='_userUuid'
+							listFilter={listUserMarket?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: v?.fullName,
+							}))}
+						/>
+					</div>
+
 					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
@@ -357,6 +350,10 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								),
 							},
 							{
+								title: 'Kv cảng xuất khẩu',
+								render: (data: IPriceTag) => <>{data?.customerUu?.companyUu?.name || '---'}</>,
+							},
+							{
 								title: 'Giá tiền (VNĐ)',
 								render: (data: IPriceTag) => <>{convertCoin(data?.pricetagUu?.amount) || 0} </>,
 							},
@@ -396,6 +393,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 							},
 							{
 								title: 'Tác vụ',
+								selectRow: true,
 								fixedRight: true,
 								render: (data: IPriceTag) => (
 									<div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
