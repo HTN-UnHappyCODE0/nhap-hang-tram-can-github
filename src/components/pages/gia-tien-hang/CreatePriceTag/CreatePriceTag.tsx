@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {PropsCreatePriceTag} from './interfaces';
 import styles from './CreatePriceTag.module.scss';
 import Button from '~/components/common/Button';
@@ -28,13 +28,15 @@ import SelectSearch from '~/components/common/SelectSearch';
 import priceTagServices from '~/services/priceTagServices';
 import {toastWarn} from '~/common/funcs/toast';
 import DialogWarning from '~/components/common/DialogWarning';
+import companyServices from '~/services/companyServices';
 
 function CreatePriceTag({}: PropsCreatePriceTag) {
 	const router = useRouter();
 
-	const [listCustomerChecked, setListCustomerChecked] = useState<any[]>([]);
+	const [listCustomerChecked, setListCustomerChecked] = useState<string>('');
 	const [priceTag, setPriceTag] = useState<any>({});
 	const [openWarning, setOpenWarning] = useState<boolean>(false);
+	const [uuidCompany, setUuidCompany] = useState<string>('');
 
 	const [form, setForm] = useState<{
 		specUuid: string;
@@ -48,7 +50,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		state: CONFIG_STATE_SPEC_CUSTOMER.DANG_CUNG_CAP,
 	});
 
-	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang], {
+	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang, uuidCompany], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -65,6 +67,26 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 					typeCus: TYPE_CUSTOMER.NHA_CUNG_CAP,
 					provinceId: '',
 					specUuid: '',
+					companyUuid: uuidCompany,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
+	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: companyServices.listCompany({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
 				}),
 			}),
 		select(data) {
@@ -133,15 +155,15 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		},
 	});
 
-	const handleCheckAll = (e: any) => {
-		const {checked} = e?.target;
+	// const handleCheckAll = (e: any) => {
+	// 	const {checked} = e?.target;
 
-		if (checked) {
-			setListCustomerChecked(listCustomer.data);
-		} else {
-			setListCustomerChecked([]);
-		}
-	};
+	// 	if (checked) {
+	// 		setListCustomerChecked(listCustomer.data);
+	// 	} else {
+	// 		setListCustomerChecked([]);
+	// 	}
+	// };
 
 	const funcAddSpecification = useMutation({
 		mutationFn: () =>
@@ -152,7 +174,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 				http: priceTagServices.addPricetagToCustomer({
 					infoSpec: [
 						{
-							specUuid: form.specUuid,
+							specUuid: null,
 							status: CONFIG_STATUS.HOAT_DONG,
 							state: form.state,
 							productTypeUuid: form.productTypeUuid,
@@ -160,7 +182,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 							priceTagUuid: priceTag.id === '' ? String(priceTag.name) : priceTag.id,
 						},
 					],
-					customerUuid: listCustomerChecked.map((value) => value.uuid),
+					customerUuid: [listCustomerChecked],
 				}),
 			}),
 		onSuccess(data) {
@@ -191,6 +213,14 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		return setOpenWarning(true);
 	};
 
+	useEffect(() => {
+		if (uuidCompany) {
+			setListCustomerChecked('');
+		}
+	}, [uuidCompany]);
+
+	console.log({listCustomerChecked});
+
 	return (
 		<div className={styles.container}>
 			<Loading loading={funcAddSpecification.isLoading} />
@@ -210,9 +240,25 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 					</div>
 				</div>
 				<div className={styles.form}>
+					<div className={clsx('mt')}>
+						<div>
+							<Select
+								isSearch
+								name='productTypeUuid'
+								value={uuidCompany}
+								placeholder='Lựa chọn kv cảng xuất khẩu'
+								onChange={(e: any) => setUuidCompany(e.target.value)}
+								label={<span>Kv cảng xuất khẩu</span>}
+							>
+								{listCompany?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
+						</div>
+					</div>
 					<div className={clsx('mt', styles.group)}>
 						<div className={styles.btn}>
-							<ButtonSelectMany
+							{/* <ButtonSelectMany
 								isShowCheckAll={false}
 								showOverlay={true}
 								label={
@@ -226,7 +272,23 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								dataList={listCustomer?.data || []}
 								dataChecked={listCustomerChecked}
 								setDataChecked={setListCustomerChecked}
-							/>
+							/> */}
+							<Select
+								isSearch
+								name='listCustomerChecked'
+								value={listCustomerChecked}
+								placeholder='Lựa chọn nhà cung cấp áp dụng'
+								onChange={(e: any) => setListCustomerChecked(e.target.value)}
+								label={
+									<span>
+										Nhà cung cấp áp dụng <span style={{color: 'red'}}>*</span>
+									</span>
+								}
+							>
+								{listCustomer?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
 						</div>
 						{/* 
 						<div className={clsx(styles.checkbox_right)}>
@@ -260,6 +322,69 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								Đang cung cấp
 							</label>
 						</div>
+					</div>
+					<div className={clsx('mt', 'col_3')}>
+						<div>
+							<Select
+								isSearch
+								name='productTypeUuid'
+								value={form.productTypeUuid}
+								placeholder='Lựa chọn loại hàng'
+								onChange={(e: any) =>
+									setForm((prev: any) => ({
+										...prev,
+										productTypeUuid: e.target.value,
+										specUuid: '',
+									}))
+								}
+								label={
+									<span>
+										Loại hàng <span style={{color: 'red'}}>*</span>
+									</span>
+								}
+							>
+								{listProductType?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
+						</div>
+						{/* <Select
+							isSearch
+							name='specUuid'
+							placeholder='Lựa chọn quy cách'
+							value={form.specUuid}
+							onChange={(e: any) =>
+								setForm((prev: any) => ({
+									...prev,
+									specUuid: e.target.value,
+								}))
+							}
+							label={
+								<span>
+									Quy cách <span style={{color: 'red'}}>*</span>
+								</span>
+							}
+							readOnly={!form.productTypeUuid}
+						>
+							{listSpecifications?.data?.map((value: any) => (
+								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
+							))}
+						</Select> */}
+						<SelectSearch
+							isConvertNumber={true}
+							options={listPriceTag?.data?.map((v: any) => ({
+								id: v?.uuid,
+								name: String(v?.amount),
+							}))}
+							data={priceTag}
+							setData={setPriceTag}
+							label={
+								<span>
+									Giá tiền áp dụng <span style={{color: 'red'}}>*</span>
+								</span>
+							}
+							placeholder='Nhập giá tiền'
+						/>
 						<div className={styles.item}>
 							<label className={styles.label}>
 								Hình thức vận chuyển <span style={{color: 'red'}}>*</span>
@@ -297,69 +422,6 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className={clsx('mt', 'col_3')}>
-						<div>
-							<Select
-								isSearch
-								name='productTypeUuid'
-								value={form.productTypeUuid}
-								placeholder='Lựa chọn loại hàng'
-								onChange={(e: any) =>
-									setForm((prev: any) => ({
-										...prev,
-										productTypeUuid: e.target.value,
-										specUuid: '',
-									}))
-								}
-								label={
-									<span>
-										Loại hàng <span style={{color: 'red'}}>*</span>
-									</span>
-								}
-							>
-								{listProductType?.data?.map((value: any) => (
-									<Option key={value.uuid} title={value.name} value={value.uuid} />
-								))}
-							</Select>
-						</div>
-						<Select
-							isSearch
-							name='specUuid'
-							placeholder='Lựa chọn quy cách'
-							value={form.specUuid}
-							onChange={(e: any) =>
-								setForm((prev: any) => ({
-									...prev,
-									specUuid: e.target.value,
-								}))
-							}
-							label={
-								<span>
-									Quy cách <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-							readOnly={!form.productTypeUuid}
-						>
-							{listSpecifications?.data?.map((value: any) => (
-								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
-							))}
-						</Select>
-						<SelectSearch
-							isConvertNumber={true}
-							options={listPriceTag?.data?.map((v: any) => ({
-								id: v?.uuid,
-								name: String(v?.amount),
-							}))}
-							data={priceTag}
-							setData={setPriceTag}
-							label={
-								<span>
-									Giá tiền áp dụng <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-							placeholder='Nhập giá tiền'
-						/>
 					</div>
 				</div>
 			</Form>

@@ -247,6 +247,7 @@ const priceTagServices = {
 			userOwnerCompanyUuid: string | null;
 			transportType: number | null;
 			dateCheck: string | null;
+			companyUuid?: string | null;
 		},
 		tokenAxios?: any
 	) => {
