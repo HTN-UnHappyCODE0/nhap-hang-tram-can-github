@@ -144,9 +144,9 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 		if (!form.timeStart) {
 			return toastWarn({msg: 'Vui lòng chọn ngày bắt đầu!'});
 		}
-		if (!form.timeEnd) {
-			return toastWarn({msg: 'Vui lòng chọn ngày kết thúc!'});
-		}
+		// if (!form.timeEnd) {
+		// 	return toastWarn({msg: 'Vui lòng chọn ngày kết thúc!'});
+		// }
 
 		if (!!form.timeEnd) {
 			const timeStart = new Date(form.timeStart);
@@ -242,11 +242,7 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 							<div>
 								<DatePicker
 									icon={true}
-									label={
-										<span>
-											Đến ngày<span style={{color: 'red'}}>*</span>
-										</span>
-									}
+									label={<span>Đến ngày</span>}
 									placeholder='Chọn ngày'
 									value={form?.timeEnd}
 									onSetValue={(date) => {
