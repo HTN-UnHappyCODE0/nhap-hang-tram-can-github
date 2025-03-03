@@ -26,6 +26,7 @@ import {PiSealWarningFill} from 'react-icons/pi';
 import Moment from 'react-moment';
 import moment from 'moment';
 import {timeSubmit} from '~/common/funcs/optionConvert';
+import wareServices from '~/services/wareServices';
 
 function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 	const queryClient = useQueryClient();
@@ -36,10 +37,52 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 		customer: '',
 		productType: '',
 		spec: '',
+		quality: '',
 		transport: '',
 		state: CONFIG_STATE_SPEC_CUSTOMER.DANG_CUNG_CAP,
 		timeStart: null,
 		timeEnd: null,
+	});
+
+	const listSpecifications = useQuery([QUERY_KEY.dropdown_quy_cach, form.productTypeUuid], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: wareServices.listSpecification({
+					page: 1,
+					pageSize: 100,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+					qualityUuid: '',
+					productTypeUuid: form.productTypeUuid,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+		enabled: !!form.productTypeUuid,
+	});
+
+	const listQuality = useQuery([QUERY_KEY.dropdown_quoc_gia], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: wareServices.listQuality({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
 	});
 
 	const listPriceTag = useQuery([QUERY_KEY.dropdown_gia_tien_hang], {
@@ -85,7 +128,8 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 			setForm({
 				customer: dataUpdate?.customerUu?.name,
 				productType: dataUpdate?.productTypeUu?.name,
-				spec: dataUpdate?.specUu?.name,
+				spec: dataUpdate?.specUu?.name || '',
+				quality: dataUpdate?.qualityUu?.name || '',
 				transport:
 					dataUpdate?.transportType == TYPE_TRANSPORT.DUONG_BO
 						? 'Đường bộ'
@@ -184,16 +228,6 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 							/>
 						</div>
 						<div className={clsx('mt', 'col_2')}>
-							{/* <Input
-								placeholder='Quy cách'
-								name='spec'
-								readOnly={true}
-								label={
-									<span>
-										Quy cách <span style={{color: 'red'}}>*</span>
-									</span>
-								}
-							/> */}
 							<div>
 								<Input
 									placeholder='Loại hàng'
@@ -214,6 +248,30 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 									label={
 										<span>
 											Phương thức vận chuyển <span style={{color: 'red'}}>*</span>
+										</span>
+									}
+								/>
+							</div>
+						</div>
+						<div className={clsx('mt', 'col_2')}>
+							<Input
+								placeholder='Chưa có quy cách'
+								name='spec'
+								readOnly={true}
+								label={
+									<span>
+										Quy cách <span style={{color: 'red'}}>*</span>
+									</span>
+								}
+							/>
+							<div>
+								<Input
+									placeholder='Chưa có chất lượng'
+									name='quality'
+									readOnly={true}
+									label={
+										<span>
+											Chất lượng <span style={{color: 'red'}}>*</span>
 										</span>
 									}
 								/>
