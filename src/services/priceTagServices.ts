@@ -98,6 +98,7 @@ const priceTagServices = {
 				state: 0 | 1;
 				transportType: number;
 				storageUuid?: string;
+				qualityUuid?: string;
 			}[];
 			customerUuid: string[];
 		},

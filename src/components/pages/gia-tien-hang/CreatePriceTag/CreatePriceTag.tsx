@@ -43,9 +43,11 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		transportType: number;
 		productTypeUuid: string;
 		state: CONFIG_STATE_SPEC_CUSTOMER;
+		qualityUuid: string;
 	}>({
 		specUuid: '',
 		productTypeUuid: '',
+		qualityUuid: '',
 		transportType: TYPE_TRANSPORT.DUONG_THUY,
 		state: CONFIG_STATE_SPEC_CUSTOMER.DANG_CUNG_CAP,
 	});
@@ -136,6 +138,25 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		},
 	});
 
+	const listQuality = useQuery([QUERY_KEY.dropdown_quoc_gia], {
+		queryFn: () =>
+			httpRequest({
+				isDropdown: true,
+				http: wareServices.listQuality({
+					page: 1,
+					pageSize: 50,
+					keyword: '',
+					isPaging: CONFIG_PAGING.NO_PAGING,
+					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
+					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
+					status: CONFIG_STATUS.HOAT_DONG,
+				}),
+			}),
+		select(data) {
+			return data;
+		},
+	});
+
 	const listPriceTag = useQuery([QUERY_KEY.dropdown_gia_tien_hang], {
 		queryFn: () =>
 			httpRequest({
@@ -174,12 +195,13 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 				http: priceTagServices.addPricetagToCustomer({
 					infoSpec: [
 						{
-							specUuid: null,
+							specUuid: form.specUuid,
 							status: CONFIG_STATUS.HOAT_DONG,
 							state: form.state,
 							productTypeUuid: form.productTypeUuid,
 							transportType: form.transportType,
 							priceTagUuid: priceTag.id === '' ? String(priceTag.name) : priceTag.id,
+							qualityUuid: form.qualityUuid,
 						},
 					],
 					customerUuid: [listCustomerChecked],
@@ -200,6 +222,9 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		// if (!form.specUuid) {
 		// 	return toastWarn({msg: 'Vui lòng chọn loại quy cách!'});
 		// }
+		if (form.specUuid && !form.qualityUuid) {
+			return toastWarn({msg: 'Vui lòng chọn quốc gia!'});
+		}
 		if (!form.productTypeUuid) {
 			return toastWarn({msg: 'Vui lòng chọn loại hàng!'});
 		}
@@ -348,28 +373,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 								))}
 							</Select>
 						</div>
-						{/* <Select
-							isSearch
-							name='specUuid'
-							placeholder='Lựa chọn quy cách'
-							value={form.specUuid}
-							onChange={(e: any) =>
-								setForm((prev: any) => ({
-									...prev,
-									specUuid: e.target.value,
-								}))
-							}
-							label={
-								<span>
-									Quy cách <span style={{color: 'red'}}>*</span>
-								</span>
-							}
-							readOnly={!form.productTypeUuid}
-						>
-							{listSpecifications?.data?.map((value: any) => (
-								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
-							))}
-						</Select> */}
+
 						<SelectSearch
 							isConvertNumber={true}
 							options={listPriceTag?.data?.map((v: any) => ({
@@ -421,6 +425,45 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 									<label htmlFor='van_chuyen_bo'>Đường bộ</label>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div className={clsx('mt', 'col_2')}>
+						<Select
+							isSearch
+							name='specUuid'
+							placeholder='Lựa chọn quy cách'
+							value={form.specUuid}
+							onChange={(e: any) =>
+								setForm((prev: any) => ({
+									...prev,
+									specUuid: e.target.value,
+								}))
+							}
+							readOnly={!form.productTypeUuid}
+							label={<span>Quy cách</span>}
+						>
+							{listSpecifications?.data?.map((value: any) => (
+								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
+							))}
+						</Select>
+						<div>
+							<Select
+								isSearch
+								name='qualityUuid'
+								value={form.qualityUuid}
+								placeholder='Lựa chọn quốc gia'
+								onChange={(e: any) =>
+									setForm((prev: any) => ({
+										...prev,
+										qualityUuid: e.target.value,
+									}))
+								}
+								label={<span>Quốc gia</span>}
+							>
+								{listQuality?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
 						</div>
 					</div>
 				</div>
