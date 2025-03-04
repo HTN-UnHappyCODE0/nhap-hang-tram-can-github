@@ -307,6 +307,23 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 						/>
 					</div>
 					<div className={styles.filter}>
+						<FilterCustom
+							isSearch
+							name='Vận chuyển'
+							query='_transportType'
+							listFilter={[
+								{
+									id: TYPE_TRANSPORT.DUONG_BO,
+									name: 'Đường bộ',
+								},
+								{
+									id: TYPE_TRANSPORT.DUONG_THUY,
+									name: 'Đường thủy',
+								},
+							]}
+						/>
+					</div>
+					<div className={styles.filter}>
 						<SelectFilterState
 							uuid={uuidQuality}
 							setUuid={setUuidQuality}
@@ -364,23 +381,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 							}))}
 						/>
 					</div> */}
-					<div className={styles.filter}>
-						<FilterCustom
-							isSearch
-							name='Vận chuyển'
-							query='_transportType'
-							listFilter={[
-								{
-									id: TYPE_TRANSPORT.DUONG_BO,
-									name: 'Đường bộ',
-								},
-								{
-									id: TYPE_TRANSPORT.DUONG_THUY,
-									name: 'Đường thủy',
-								},
-							]}
-						/>
-					</div>
+
 					<div className={styles.filter}>
 						<FilterCustom
 							isSearch
@@ -455,14 +456,6 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								render: (data: IPriceTag) => <>{data?.productTypeUu?.name || '---'}</>,
 							},
 							{
-								title: 'Quy cách',
-								render: (data: IPriceTag) => <>{data?.specUu?.name || '---'}</>,
-							},
-							{
-								title: 'Quốc gia',
-								render: (data: IPriceTag) => <>{data?.qualityUu?.name || '---'}</>,
-							},
-							{
 								title: 'Vận chuyển',
 								render: (data: IPriceTag) => (
 									<>
@@ -471,6 +464,15 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 									</>
 								),
 							},
+							{
+								title: 'Quốc gia',
+								render: (data: IPriceTag) => <>{data?.qualityUu?.name || '---'}</>,
+							},
+							{
+								title: 'Quy cách',
+								render: (data: IPriceTag) => <>{data?.specUu?.name || '---'}</>,
+							},
+
 							{
 								title: 'Cung cấp',
 								render: (data: any) => <TagStatusSpecCustomer status={data.state} />,
