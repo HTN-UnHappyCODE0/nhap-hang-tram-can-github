@@ -96,7 +96,7 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 		},
 	});
 
-	const listSpecifications = useQuery([QUERY_KEY.dropdown_quy_cach, form.productTypeUuid], {
+	const listSpecifications = useQuery([QUERY_KEY.dropdown_quy_cach, form.productTypeUuid, form.qualityUuid], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -108,14 +108,14 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 					isDescending: CONFIG_DESCENDING.NO_DESCENDING,
 					typeFind: CONFIG_TYPE_FIND.DROPDOWN,
 					status: CONFIG_STATUS.HOAT_DONG,
-					qualityUuid: '',
+					qualityUuid: form.qualityUuid,
 					productTypeUuid: form.productTypeUuid,
 				}),
 			}),
 		select(data) {
 			return data;
 		},
-		enabled: !!form.productTypeUuid,
+		// enabled: !!form.productTypeUuid,
 	});
 
 	const listProductType = useQuery([QUERY_KEY.dropdown_loai_go], {
@@ -243,8 +243,6 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 			setListCustomerChecked('');
 		}
 	}, [uuidCompany]);
-
-	console.log({listCustomerChecked});
 
 	return (
 		<div className={styles.container}>
@@ -428,6 +426,35 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 						</div>
 					</div>
 					<div className={clsx('mt', 'col_2')}>
+						<div>
+							<Select
+								isSearch
+								name='qualityUuid'
+								value={form.qualityUuid}
+								placeholder='Lựa chọn quốc gia'
+								onChange={(e: any) =>
+									setForm((prev: any) => ({
+										...prev,
+										qualityUuid: e.target.value,
+										specUuid: '',
+									}))
+								}
+								onClean={
+									form.qualityUuid
+										? () =>
+												setForm((prev: any) => ({
+													...prev,
+													qualityUuid: '',
+												}))
+										: undefined
+								}
+								label={<span>Quốc gia</span>}
+							>
+								{listQuality?.data?.map((value: any) => (
+									<Option key={value.uuid} title={value.name} value={value.uuid} />
+								))}
+							</Select>
+						</div>
 						<Select
 							isSearch
 							name='specUuid'
@@ -439,32 +466,22 @@ function CreatePriceTag({}: PropsCreatePriceTag) {
 									specUuid: e.target.value,
 								}))
 							}
-							readOnly={!form.productTypeUuid}
+							onClean={
+								form.specUuid
+									? () =>
+											setForm((prev: any) => ({
+												...prev,
+												specUuid: '',
+											}))
+									: undefined
+							}
+							// readOnly={!form.productTypeUuid}
 							label={<span>Quy cách</span>}
 						>
 							{listSpecifications?.data?.map((value: any) => (
 								<Option key={value.uuid} title={value?.name} value={value?.uuid} />
 							))}
 						</Select>
-						<div>
-							<Select
-								isSearch
-								name='qualityUuid'
-								value={form.qualityUuid}
-								placeholder='Lựa chọn quốc gia'
-								onChange={(e: any) =>
-									setForm((prev: any) => ({
-										...prev,
-										qualityUuid: e.target.value,
-									}))
-								}
-								label={<span>Quốc gia</span>}
-							>
-								{listQuality?.data?.map((value: any) => (
-									<Option key={value.uuid} title={value.name} value={value.uuid} />
-								))}
-							</Select>
-						</div>
 					</div>
 				</div>
 			</Form>
