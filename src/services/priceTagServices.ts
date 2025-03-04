@@ -21,6 +21,7 @@ const priceTagServices = {
 			userUuid?: string | null;
 			parentUserUuid?: string | null;
 			companyUuid?: string;
+			qualityUuid?: string;
 		},
 		tokenAxios?: any
 	) => {
