@@ -266,12 +266,12 @@ function FormUpdatePriceTag({dataUpdate, onClose}: PropsFormUpdatePriceTag) {
 							/>
 							<div>
 								<Input
-									placeholder='Chưa có chất lượng'
+									placeholder='Chưa có quốc gia'
 									name='quality'
 									readOnly={true}
 									label={
 										<span>
-											Chất lượng <span style={{color: 'red'}}>*</span>
+											Quốc gia <span style={{color: 'red'}}>*</span>
 										</span>
 									}
 								/>

@@ -382,7 +382,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 						/>
 					</div> */}
 
-					<div className={styles.filter}>
+					{/* <div className={styles.filter}>
 						<FilterCustom
 							isSearch
 							name='Cung cấp'
@@ -398,7 +398,7 @@ function MainPriceTagCurrent({}: PropsMainPriceTagCurrent) {
 								},
 							]}
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div>
 					<Button p_8_16 rounded_2 href={PATH.ThemGiaTien} icon={<Image alt='icon add' src={icons.add} width={20} height={20} />}>
