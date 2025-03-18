@@ -210,6 +210,28 @@ const batchBillServices = {
 			cancelToken: tokenAxios,
 		});
 	},
+	dashbroadCustomerBillIn: (
+		data: {
+			userOwnerUuid: string;
+			partnerUuid: string;
+			companyUuid: string;
+			typeFindDay: number;
+			timeStart: string | null;
+			timeEnd: string | null;
+			isShowBDMT: number;
+			typeShow: number;
+			transportType: number;
+			storageUuid: string;
+			provinceId: string;
+			customerUuid: string[];
+			warehouseUuid: string;
+		},
+		tokenAxios?: any
+	) => {
+		return axiosClient.post(`/BatchBill/dashbroad-customer-bill-in`, data, {
+			cancelToken: tokenAxios,
+		});
+	},
 };
 
 export default batchBillServices;
