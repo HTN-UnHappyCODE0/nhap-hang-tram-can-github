@@ -53,17 +53,16 @@ import Loading from '~/components/common/Loading';
 
 function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 	const router = useRouter();
-	const queryClient = useQueryClient();
 
 	const {_userOwnerUuid, _partnerUuid, _dateFrom, _dateTo} = router.query;
 
-	const [uuidDescription, setUuidDescription] = useState<string>('');
 	const [listStatisticsByDay, setListStatisticsByDay] = useState<any[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [uuidCompany, setUuidCompany] = useState<string>('');
 	const [customerUuid, setCustomerUuid] = useState<string[]>([]);
 	const [uuidStorage, setUuidStorage] = useState<string>('');
-	const [total, setTotal] = useState<number>(0);
+	const [listCompanyUuid, setListCompanyUuid] = useState<any[]>([]);
+	const [listPartnerUuid, setListPartnerUuid] = useState<any[]>([]);
 
 	const listCompany = useQuery([QUERY_KEY.dropdown_cong_ty], {
 		queryFn: () =>
@@ -106,7 +105,7 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 		},
 	});
 
-	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang], {
+	const listCustomer = useQuery([QUERY_KEY.dropdown_khach_hang, listPartnerUuid, listCompanyUuid], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -123,6 +122,8 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 					typeCus: null,
 					provinceId: '',
 					specUuid: '',
+					listPartnerUUid: listPartnerUuid,
+					listCompanyUuid: listCompanyUuid,
 				}),
 			}),
 		select(data) {
@@ -196,10 +197,19 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 		}, []);
 	};
 
-	
-
 	const getListDashbroadCustomerBillIn = useQuery(
-		[QUERY_KEY.table_thong_ke_theo_ngay, _userOwnerUuid, uuidCompany, customerUuid, _partnerUuid, uuidStorage, _dateFrom, _dateTo],
+		[
+			QUERY_KEY.table_thong_ke_theo_ngay,
+			_userOwnerUuid,
+			uuidCompany,
+			customerUuid,
+			_partnerUuid,
+			uuidStorage,
+			_dateFrom,
+			_dateTo,
+			listCompanyUuid,
+			listPartnerUuid,
+		],
 		{
 			queryFn: () =>
 				httpRequest({
@@ -209,7 +219,7 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 						companyUuid: uuidCompany,
 						customerUuid: customerUuid,
 						isShowBDMT: 0,
-						partnerUuid: _partnerUuid as string,
+						partnerUuid: '',
 						provinceId: '',
 						storageUuid: uuidStorage,
 						timeStart: _dateFrom ? (_dateFrom as string) : null,
@@ -219,6 +229,8 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 						typeShow: 0,
 						userOwnerUuid: (_userOwnerUuid as string) || '',
 						warehouseUuid: '',
+						listCompanyUuid: listCompanyUuid,
+						listPartnerUuid: listPartnerUuid,
 					}),
 				}),
 			onSuccess(data) {
@@ -226,7 +238,7 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 					const newData = convertData(data);
 					setListStatisticsByDay(newData);
 					// setTotal(data?.pagination?.totalCount);
-					console.log('acb', data)
+					// console.log('acb', data)
 				}
 			},
 			select(data) {
@@ -242,37 +254,58 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 	// 		setListStatisticsByDay(convertData(getListDashbroadCustomerBillIn?.data || []));}
 	// }, [getListDashbroadCustomerBillIn]);
 
-
-	
 	const dynamicColumns =
 		listStatisticsByDay?.[0]?.timeList?.map((item: any) => ({
-			title: item?.timeScale,
+			title: (
+				<span className={styles.unit}>
+					{item?.timeScale} <br /> (Tấn/%)
+				</span>
+			),
 			render: (data: any) => {
 				const matchedTime = data?.timeList?.find((t: any) => t?.timeScale === item?.timeScale);
-				return <span> <p>{convertWeight(matchedTime?.weightBDMT)} (tấn)</p> <p>{matchedTime?.drynessAvg!?.toFixed(2) || '---'} %</p></span>;
+				return (
+					<span>
+						<p>{convertWeight(matchedTime?.weightBDMT)}</p> <p>{matchedTime?.drynessAvg!?.toFixed(2) || '---'} </p>
+					</span>
+				);
 			},
 		})) || [];
+
+	useEffect(() => {
+		if (listCompanyUuid) {
+			setCustomerUuid([]);
+		}
+		if (listPartnerUuid) {
+			setCustomerUuid([]);
+		}
+	}, [listCompanyUuid, listPartnerUuid]);
 
 	return (
 		<div className={styles.container}>
 			{/* <Loading loading={getListDashbroadCustomerBillIn.isLoading} /> */}
 			<div className={styles.header}>
 				<div className={styles.main_search}>
-					<div className={styles.search}>
+					{/* <div className={styles.search}>
 						<Search keyName='_keyword' placeholder='Tìm kiếm ...' />
-					</div>
-					<div className={styles.filter}>
-						<SelectFilterState
-							uuid={uuidCompany}
-							setUuid={setUuidCompany}
-							listData={listCompany?.data?.map((v: any) => ({
-								uuid: v?.uuid,
-								name: v?.name,
-							}))}
-							placeholder='Kv cảng xuất khẩu'
-						/>
-					</div>
-
+					</div> */}
+					<SelectFilterMany
+						selectedIds={listCompanyUuid}
+						setSelectedIds={setListCompanyUuid}
+						listData={listCompany?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						name='Kv cảng xuất khẩu'
+					/>
+					<SelectFilterMany
+						selectedIds={listPartnerUuid}
+						setSelectedIds={setListPartnerUuid}
+						listData={listPartner?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						name='Công ty'
+					/>
 					<SelectFilterMany
 						selectedIds={customerUuid}
 						setSelectedIds={setCustomerUuid}
@@ -280,21 +313,10 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 							uuid: v?.uuid,
 							name: v?.name,
 						}))}
-						name='Khách hàng'
+						name='Nhà cung cấp'
 					/>
 
-					<div className={styles.filter}>
-						<FilterCustom
-							isSearch
-							name='Công ty'
-							query='_partnerUuid'
-							listFilter={listPartner?.data?.map((v: any) => ({
-								id: v?.uuid,
-								name: v?.name,
-							}))}
-						/>
-					</div>
-					<SelectFilterState
+					{/* <SelectFilterState
 						uuid={uuidStorage}
 						setUuid={setUuidStorage}
 						listData={listStorage?.data?.map((v: any) => ({
@@ -302,7 +324,7 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 							name: v?.name,
 						}))}
 						placeholder='Bãi'
-					/>
+					/> */}
 
 					<div className={styles.filter}>
 						<DateRangerCustom titleTime='Thời gian' typeDateDefault={TYPE_DATE.YESTERDAY} />
@@ -324,9 +346,13 @@ function MainPageStatisticsByDay({}: PropsMainPageStatisticsByDay) {
 								render: (data: any, index: number) => <>{index + 1}</>,
 							},
 							{
-								title: 'Xưởng sản xuất',
+								title: 'Nhà cung cấp',
 								fixedLeft: true,
-								render: (data: any) => <p className={styles.link}>{data?.customerUu?.name}</p>,
+								render: (data: any) => (
+									<Link href={`/xuong/${data?.customerUu?.uuid}`} className={styles.link}>
+										{data?.customerUu?.name || '---'}
+									</Link>
+								),
 							},
 
 							{

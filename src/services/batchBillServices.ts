@@ -225,6 +225,8 @@ const batchBillServices = {
 			provinceId: string;
 			customerUuid: string[];
 			warehouseUuid: string;
+			listCompanyUuid: string[];
+			listPartnerUuid: string[];
 		},
 		tokenAxios?: any
 	) => {
