@@ -261,7 +261,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					const objTotal = {
 						'Lớn nhất': v?.priceMax || 0,
 						'Trung bình': v?.priceAvg || 0,
-						'Nhó nhất': v?.priceMin || 0,
+						'Nhỏ nhất': v?.priceMin || 0,
 					};
 
 					const obj = v?.customerPriceDTO?.reduce((acc: any, {customerUu, price}: {customerUu: any; price: number}) => {
@@ -306,7 +306,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 								fill: '#FF6838',
 							},
 							{
-								key: 'Nhó nhất',
+								key: 'Nhỏ nhất',
 								fill: '#2DA2BC',
 							},
 
