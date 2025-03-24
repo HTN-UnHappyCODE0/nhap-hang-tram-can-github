@@ -262,12 +262,14 @@ const priceTagServices = {
 			timeStart: string;
 			timeEnd: string;
 			userOwnerUuid: string;
-			partnerUuid: string;
-			customerUuid: string;
-			companyUuid: string;
-			transport_type: number | null;
 			productTypeUuid: string;
-			provinceId: string;
+			typeFindDay?: number;
+			transportType: number | null;
+			qualityUUid: string;
+			provinceId: string[];
+			customerUuid: string[];
+			listCompanyUuid: string[];
+			listPartnerUuid: string[];
 		},
 		tokenAxios?: any
 	) => {

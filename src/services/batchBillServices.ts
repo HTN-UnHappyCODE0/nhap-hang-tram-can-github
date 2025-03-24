@@ -157,6 +157,8 @@ const batchBillServices = {
 			userOwnerUuid: string;
 			provinceId: string;
 			transportType: number | null;
+			listCompanyUuid: string[];
+			listPartnerUuid: string[];
 		},
 		tokenAxios?: any
 	) => {

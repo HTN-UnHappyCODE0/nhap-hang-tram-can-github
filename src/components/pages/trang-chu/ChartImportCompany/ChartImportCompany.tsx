@@ -46,7 +46,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 	const [userUuid, setUserUuid] = useState<string>('');
 	const [storageUuid, setStorageUuid] = useState<string>('');
 	const [typeDate, setTypeDate] = useState<number | null>(TYPE_DATE.LAST_7_DAYS);
-	const [uuidCompany, setUuidCompanyFilter] = useState<string>('');
+	const [uuidCompany, setUuidCompanyFilter] = useState<string[]>([]);
 	const [date, setDate] = useState<{
 		from: Date | null;
 		to: Date | null;
@@ -90,7 +90,7 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 					typeCus: TYPE_CUSTOMER.NHA_CUNG_CAP,
 					provinceId: '',
 					specUuid: '',
-					companyUuid: uuidCompany,
+					listCompanyUuid: uuidCompany,
 				}),
 			}),
 		select(data) {
@@ -221,12 +221,14 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						storageUuid: storageUuid,
 						userOwnerUuid: userUuid,
 						warehouseUuid: '',
-						companyUuid: uuidCompany,
+						companyUuid: '',
 						typeFindDay: 0,
 						timeStart: timeSubmit(date?.from)!,
 						timeEnd: timeSubmit(date?.to, true)!,
 						provinceId: provinceUuid,
 						transportType: isTransport ? Number(isTransport) : null,
+						listCompanyUuid: uuidCompany,
+						listPartnerUuid: [],
 					}),
 				}),
 			onSuccess({data}) {
@@ -343,9 +345,18 @@ function ChartImportCompany({}: PropsChartImportCompany) {
 						placeholder='Tấn hàng'
 					/>
 
-					<SelectFilterOption
+					{/* <SelectFilterOption
 						uuid={uuidCompany}
 						setUuid={setUuidCompanyFilter}
+						listData={listCompany?.data?.map((v: any) => ({
+							uuid: v?.uuid,
+							name: v?.name,
+						}))}
+						placeholder='Tất cả kv cảng xuất khẩu'
+					/> */}
+					<SelectFilterMany
+						selectedIds={uuidCompany}
+						setSelectedIds={setUuidCompanyFilter}
 						listData={listCompany?.data?.map((v: any) => ({
 							uuid: v?.uuid,
 							name: v?.name,
