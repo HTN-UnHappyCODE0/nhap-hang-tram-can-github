@@ -79,7 +79,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 		},
 	});
 
-	const listPartner = useQuery([QUERY_KEY.dropdown_nha_cung_cap], {
+	const listPartner = useQuery([QUERY_KEY.dropdown_nha_cung_cap, uuidCompany], {
 		queryFn: () =>
 			httpRequest({
 				isDropdown: true,
@@ -94,6 +94,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					userUuid: '',
 					provinceId: '',
 					type: TYPE_PARTNER.NCC,
+					listCompanyUuid: uuidCompany,
 				}),
 			}),
 		select(data) {
@@ -344,14 +345,14 @@ function ChartStackArea({}: PropsChartStackArea) {
 	);
 
 	const filteredProductTypes = useMemo(() => {
-		if (customerUuid.length === 0) {
+		if (customerUuid?.length === 0) {
 			return productTypes.filter((v) => v.key !== 'Khách hàng');
 		}
 		return productTypes;
 	}, [customerUuid, productTypes]);
 
 	const filteredDataChart = useMemo(() => {
-		if (customerUuid.length === 0) {
+		if (customerUuid?.length === 0) {
 			return dataChart?.map((item) => {
 				const {'Khách hàng': _, ...rest} = item;
 				return rest;
@@ -370,10 +371,18 @@ function ChartStackArea({}: PropsChartStackArea) {
 	}, [uuidCompany, listPartnerUuid]);
 
 	useEffect(() => {
+		if (uuidCompany) {
+			setListPartnerUuid([]);
+		}
+	}, [uuidCompany]);
+
+	useEffect(() => {
 		if (listProductType?.data?.length > 0) {
-			setProductUuid(listProductType.data[listProductType.data.length - 1].uuid);
+			setProductUuid(listProductType.data[listProductType.data.length - 1].uuid); // để
 		}
 	}, [listProductType.data]);
+
+	console.log('abc', uuidCompany);
 
 	return (
 		<div className={styles.container}>
@@ -497,7 +506,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 					<AreaChart
 						width={500}
 						height={300}
-						data={filteredDataChart}
+						data={dataChart}
 						margin={{
 							top: 8,
 							right: 8,
@@ -510,7 +519,7 @@ function ChartStackArea({}: PropsChartStackArea) {
 						<YAxis domain={[2000000, 'dataMax']} tickFormatter={(value) => convertCoin(value)} />
 						<Tooltip formatter={(value) => convertCoin(Number(value))} />
 
-						{filteredProductTypes.map((v) => (
+						{productTypes.map((v) => (
 							<Area
 								key={v.key}
 								type='linear'
